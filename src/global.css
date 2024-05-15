@@ -14,6 +14,8 @@
 	--color-primary-400: #e2ad6f;
 	--color-primary-500: #e9ba86;
 	--color-primary-600: #efc89e;
+	--color-primary-700: #f4dbc0;
+
 	/** CSS DARK THEME SURFACE COLORS */
 	--color-surface-100: #121212;
 	--color-surface-200: #282828;
@@ -42,4 +44,8 @@
 	--color-gray-900: #212121;
 	
 	
+}
+
+a.mapboxgl-ctrl-logo{
+	display: none !important;
 }

@@ -1,12 +1,17 @@
 <script>
 	import Map from './Map.svelte';
-	import Sidebar from './Sidebar.svelte';
+	import Sidebar from './MapSidebar.svelte';
 </script>
 
 <div class="map-container">
 	<Map />
 </div>
-<Sidebar />
+<Sidebar>
+	<div slot="content">
+		<h1>Map Sidebar</h1>
+		<p>Some content here</p>
+	</div>
+</Sidebar>
 
 <style>
 	.map-container {
