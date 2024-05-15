@@ -1,14 +1,15 @@
-<script>
+<script lang="ts">
 	import Spinner from '$lib/components/LoadingSpinner.svelte';
-import map from './map';
+	import MapManager from '../../lib/functions/map/mapManager';
 	import { onMount } from 'svelte';
 
-	let hasLoaded = false;
+	let isLoading = true;
+	let map: MapManager = new MapManager('map', import.meta.env.VITE_MAPBOX_ACCESS_TOKEN);
 
 	onMount(() => {
 		map.initMap();
 		map.mapbox?.on('load', () => {
-			hasLoaded = true;
+			isLoading = false;
 			console.log('Map loaded');
 		});
 	});
@@ -16,8 +17,8 @@ import map from './map';
 
 <div id="map-container">
 	<div id="map"></div>
-	{#if !hasLoaded}
-		<Spinner/>
+	{#if isLoading}
+		<Spinner />
 	{/if}
 </div>
 
@@ -28,5 +29,4 @@ import map from './map';
 		height: 100%;
 		position: relative;
 	}
-
 </style>
