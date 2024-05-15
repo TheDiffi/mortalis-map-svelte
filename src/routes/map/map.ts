@@ -1,5 +1,5 @@
-import { SOURCE_URLS } from '$lib/constants';
-import iwd_features_json from "$lib/assets/geo/iwd_features.json";
+import { SOURCE_URLS } from '$lib/functions/constants';
+import iwd_features_json from "$lib/data/geo/iwd_features.json";
 import mapboxgl from 'mapbox-gl';
 
 export class MapManager {

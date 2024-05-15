@@ -16,4 +16,11 @@
 		width: 100%;
 		height: 100%;
 	}
+	.map-container-test {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 400px;
+		height: 400px;
+	}
 </style>
