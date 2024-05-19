@@ -1,0 +1,45 @@
+# Node.js modules
+node_modules/
+
+# Build artifacts
+public/build/
+.svelte-kit/
+
+# Coverage reports
+coverage/
+
+# IDE/editor specific files
+.vscode/
+.idea/
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+
+# Temporary files
+.npmignore
+.yarn/
+
+# Local development environment files
+.env*  # Matches all files starting with ".env"
+
+# Testing frameworks (adjust as needed)
+__tests__/
+*.spec.js
+*.test.js
+*.spec.ts
+*.test.ts
+
+# Linter and Formatter
+.eslintignore
+.eslintrc.cjs
+
+.prettierrc
+.pretieriignore
+
+
+# Other
+README.md
+Dockerfile

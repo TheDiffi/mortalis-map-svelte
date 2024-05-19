@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
+		"dev-host": "vite dev --host",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -14,9 +15,11 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-node": "^5.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/mapbox-gl": "^3.1.0",
+		"@types/node": "^20.12.12",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"svelte": "^4.2.7",
@@ -29,6 +32,7 @@
 	"type": "module",
 	"dependencies": {
 		"dompurify": "^3.1.3",
+		"dotenv": "^16.4.5",
 		"mapbox-gl": "^2.3.5",
 		"marked": "^12.0.2",
 		"nanoid": "^5.0.7"

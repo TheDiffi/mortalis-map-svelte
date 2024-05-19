@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  svelte-app:
+    build: .  # Build the image from the current directory (adjust if needed)
+    
+    working_dir: /app
+    
+    environment:
+      - NODE_ENV=production
+      - VITE_PORT=5174
+      - VITE_MAPBOX_ACCESS_TOKEN=pk.eyJ1IjoidGhlZGlmZmkiLCJhIjoiY2xjeGpuYm92MjN4cjNybXNremFtMHd3aiJ9.8QG0LO8bSAfYA0zROCmEmQ
+
+
+    ports:
+      - "5050:5174"
+
+    restart: unless-stopped
+
+   
+
