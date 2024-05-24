@@ -3,7 +3,7 @@
 import Spinner from '$lib/components/LoadingSpinner.svelte';
 	import MapManager from '../../lib/functions/map/mapManager';
 	import { onMount } from 'svelte';
-	import CornerElement from './CornerElement.svelte';
+	import CornerElement from './MapCornerElement.svelte';
 
 	let isLoading = true;
 	let map: MapManager = new MapManager('map', import.meta.env.VITE_MAPBOX_ACCESS_TOKEN);
@@ -19,10 +19,11 @@ import Spinner from '$lib/components/LoadingSpinner.svelte';
 
 <div id="map-container">
 	<div id="map"></div>
+	
+	<CornerElement corner="bottom-left" style="padding: 10px;"><MapButton onClick={()=>{}}>Test</MapButton>  </CornerElement>
 	{#if isLoading}
 		<Spinner />
 	{/if}
-	<CornerElement corner="bottom-left" style="padding: 10px;"><MapButton onClick={()=>{}}>Test</MapButton>  </CornerElement>
 </div>
 
 <style>

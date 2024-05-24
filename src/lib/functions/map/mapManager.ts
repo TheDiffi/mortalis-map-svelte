@@ -1,21 +1,20 @@
 import { SOURCE_URLS } from '$lib/functions/constants';
 import iwd_features_json from '$lib/data/geo/iwd_features.json';
 import mapboxgl from 'mapbox-gl';
+import { StyleManager } from './styles';
 
 export class MapManager {
 	mapbox: mapboxgl.Map | undefined;
+	styles: StyleManager;
 	containerId: string;
 
 	constructor(containerId: string, token: string) {
 		mapboxgl.accessToken = token;
+		this.styles = new StyleManager();
 		this.containerId = containerId;
 	}
 
 	initMap() {
-		this.initIcewind();
-	}
-
-	initIcewind() {
 		this.mapbox = new mapboxgl.Map({
 			container: 'map', // container ID
 			style: 'mapbox://styles/thediffi/cld7hz283000j01ockqljc73u', // style URL
@@ -25,9 +24,9 @@ export class MapManager {
 			pitch: 25
 		});
 
-		/* this.mapbox.on('load', () => {
-			this.initMap();
-		}); */
+		this.mapbox.on('load', () => {
+			this.onLoad();
+		});
 
 		console.log('mapbox loaded: ', this.mapbox);
 	}
@@ -46,6 +45,16 @@ export class MapManager {
 				this.loadNormalStyle();
 		}
 	}
+
+	onLoad() {
+		if(this.mapbox === undefined) return;
+		/* // render map controls
+		loadMapControls(this.mapbox, this.controls, this.changeStyle);
+
+		this.markerManager = new MarkerManager(this);
+		this.markerManager.generateMarkerLayerButtons(); */
+		this.styles.initStyles(this.mapbox);
+	};
 
 	loadNormalStyle() {
 		console.log('Loading Sources: Normal');
@@ -102,5 +111,7 @@ export class MapManager {
 		});
 	}
 }
+
+
 
 export default MapManager;
