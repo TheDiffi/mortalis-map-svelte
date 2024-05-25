@@ -62,7 +62,7 @@ export class StyleManager {
 		this.loadTowns();
 	
 		// Create a popup, but don't add it to the map yet.
-		this.popupManager.loadPopups(this.mapbox, 'Normal');
+		this.popupManager.loadDefault(this.mapbox);
 	}
 	
 	
@@ -107,7 +107,7 @@ export class StyleManager {
 	
 	loadTowns() {
 		if(this.mapbox === undefined) throw new Error('Mapbox not initialized');
-
+		
 		// layers are the visual representation of the data
 		console.log('Loading Towns Layer');
 	

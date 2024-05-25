@@ -2,7 +2,7 @@ import DOMPurify from 'dompurify';
 import type { Map } from 'mapbox-gl';
 import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
-import type { MapStyles } from './styles';
+import type mapboxgl from 'mapbox-gl';
 
 const MARKER_ICON_URL = 'https://img.icons8.com/material-rounded/24/null/location-marker.png';
 
@@ -21,31 +21,28 @@ const MARKER_LAYERS = [
 	}
 ];
 
-type MapboxEvent = mapboxgl.MapMouseEvent & {
-	features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+type CustomMapboxEvent = mapboxgl.MapMouseEvent & {
+	features?: CutomMapboxGeoJSONFeature[] | undefined;
 } & mapboxgl.EventData;
 
+type CustomGeoJsonProperties = {
+	name: string;
+	description: string;
+	id: string;
+	popup: boolean;
+	type: string;
+	popup_content?: string;
+	content?: string;
+};
 
-
+type CutomMapboxGeoJSONFeature = GeoJSON.Feature<GeoJSON.Point, CustomGeoJsonProperties> & {
+	layer: mpgl.Layer;
+	source: string;
+	sourceLayer: string;
+	state: { [key: string]: any };
+};
 
 export class PopupManager {
-
-
-	loadPopups(map: Map, style: MapStyles) {
-		switch (style) {
-			case 'Normal':
-				this.loadDefault(map);
-				break;
-			case 'Player':
-				this.loadDefault(map);
-				break;
-			default:
-				this.loadDefault(map);
-		}
-
-		
-	}
-
 	loadDefault(map: Map) {
 		if (!map) throw new Error('Map is not defined');
 
@@ -63,7 +60,7 @@ export class PopupManager {
 		// Change the cursor to a pointer when the mouse is over the places layer.
 		map.on('mouseenter', markerLayerNames.concat(['cities_layer']), (e) => {
 			map.getCanvas().style.cursor = 'pointer';
-			let newPopup = this.generatePopup(e, map);
+			let newPopup = this.generatePopup(e as CustomMapboxEvent, map);
 			if (newPopup) popup = newPopup;
 		});
 
@@ -73,9 +70,10 @@ export class PopupManager {
 			if (popup) popup.remove();
 		});
 
+		//TODO: refactor: this is marker logic
 		// open the content in the sidebar when a town is clicked
 		map.on('click', 'cities_layer', (e) => {
-			this.townsOnClick(e as MapboxEvent, map);
+			this.townsOnClick(e as CustomMapboxEvent, map);
 		});
 
 		// open the content in the sidebar when a marker is clicked
@@ -94,24 +92,22 @@ export class PopupManager {
 		//sidebar.setContent(sanitizedContent);
 	} */
 
-	townsOnClick(e: MapboxEvent, map: Map) {
+	townsOnClick(e: CustomMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
 		}
 
-		console.log('town clicked');
-		const coordinates = (e.features[0]?.geometry as any).coordinates;
-		console.log('!!Check If this is a value!! Coords: ', coordinates, 'Original: ', e.features[0]);
+		const coordinates = e.features[0].geometry.coordinates;
 
 		map.flyTo({
-			center: coordinates,
+			center: coordinates as [number, number],
 			duration: 1000,
 			curve: 2,
 			pitch: 25
 		});
 
-		this.setSidebarContent(e.features[0]?.properties?.content ?? '');
+		this.setSidebarContent(e.features[0].properties.content ?? '');
 	}
 
 	setSidebarContent(unsafeContent: string) {
@@ -120,21 +116,19 @@ export class PopupManager {
 		sidebar.setContent(sanitizedContent); */
 	}
 
-	generatePopup(e: MapboxEvent, map: Map) {
+	generatePopup(e: CustomMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
 		}
 
-		if (!e.features[0]?.properties?.popup) return;
+		if (!e.features[0].properties.popup) return;
 
 		const feature = e.features[0];
-		//TODO:
-		var coordinates = (feature.geometry as any).coordinates.slice();
-
+		var coordinates = feature.geometry.coordinates.slice() as [number, number];
 		var popupContent = this.getPopupContent(feature);
 
-		this.popupMath(e, coordinates);
+		coordinates = this.adjustCoordsForMultipleFeatures(e, coordinates);
 
 		/// Populate the popup and set its coordinates
 		// based on the feature found.
@@ -163,14 +157,21 @@ export class PopupManager {
 		return popupContent;
 	}
 
-	//TODO: refactor
-	popupMath(e: MapboxEvent, coordinates: any) {
+	adjustCoordsForMultipleFeatures(e: CustomMapboxEvent, coordinates: [number, number]) {
 		// Ensure that if the map is zoomed out such that multiple
 		// copies of the feature are visible, the popup appears
 		// over the copy being pointed to.
+		let newCoords = coordinates.slice() as [number, number];
+		let i = 0;
 		while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
 			coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+
+			if (i > 100) {
+				console.error('Infinite loop detected');
+				break;
+			}
 		}
+		return newCoords;
 	}
 
 	parseContent({ name, info }: { name: string; info: string }) {
