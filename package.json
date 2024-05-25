@@ -28,7 +28,8 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^5.0.3",
-		"vitest": "^1.2.0"
+		"vitest": "^1.2.0",
+		"@types/bun": "latest"
 	},
 	"type": "module",
 	"dependencies": {
@@ -37,5 +38,6 @@
 		"mapbox-gl": "^2.3.5",
 		"marked": "^12.0.2",
 		"nanoid": "^5.0.7"
-	}
+	},
+	"module": "index.ts"
 }
