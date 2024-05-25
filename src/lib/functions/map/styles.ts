@@ -1,17 +1,20 @@
 import featuresJson from '$lib/data/geo/iwd_features.json';
 import { SOURCE_URLS } from '../constants';
 import type { Map } from 'mapbox-gl';
+import { PopupManager } from './popup';
 
 const ENABLE_DEM = true;
+export type MapStyles = 'Normal' | 'Player';
 
 export class StyleManager {
-	current: string;
+	current: MapStyles;
+	popupManager: PopupManager;
 	mapbox: Map | undefined;
 
 
 	constructor() {
 		this.current = 'Normal';
-		
+		this.popupManager = new PopupManager();
 	}
 
 	initStyles(mapbox: Map) {
@@ -19,7 +22,7 @@ export class StyleManager {
 		this.loadStyle(this.current);
 	}
 
-	loadStyle(stylename: string) {
+	loadStyle(stylename: MapStyles) {
 		console.log('Setting up style: ' + stylename);
 		// render the layers
 		switch (stylename) {
@@ -59,7 +62,7 @@ export class StyleManager {
 		this.loadTowns();
 	
 		// Create a popup, but don't add it to the map yet.
-		// loadPopups();
+		this.popupManager.loadPopups(this.mapbox, 'Normal');
 	}
 	
 	

@@ -1,7 +1,8 @@
-import { log } from 'console';
 import DOMPurify from 'dompurify';
-import mapboxgl, { Map, Popup } from 'mapbox-gl';
+import type { Map } from 'mapbox-gl';
+import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
+import type { MapStyles } from './styles';
 
 const MARKER_ICON_URL = 'https://img.icons8.com/material-rounded/24/null/location-marker.png';
 
@@ -24,8 +25,28 @@ type MapboxEvent = mapboxgl.MapMouseEvent & {
 	features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
 } & mapboxgl.EventData;
 
-export class Popups {
-	loadPopups(map: Map) {
+
+
+
+export class PopupManager {
+
+
+	loadPopups(map: Map, style: MapStyles) {
+		switch (style) {
+			case 'Normal':
+				this.loadDefault(map);
+				break;
+			case 'Player':
+				this.loadDefault(map);
+				break;
+			default:
+				this.loadDefault(map);
+		}
+
+		
+	}
+
+	loadDefault(map: Map) {
 		if (!map) throw new Error('Map is not defined');
 
 		// create a list of all the marker layer names
@@ -34,8 +55,8 @@ export class Popups {
 			return acc;
 		}, []);
 
-		var popup = new Popup({
-			closeButton: false,
+		var popup = new mpgl.Popup({
+			closeButton: true,
 			closeOnClick: false
 		});
 
@@ -81,7 +102,7 @@ export class Popups {
 
 		console.log('town clicked');
 		const coordinates = (e.features[0]?.geometry as any).coordinates;
-		log('!!Check If this is a value!! Coords: ', coordinates, 'Original: ', e.features[0]);
+		console.log('!!Check If this is a value!! Coords: ', coordinates, 'Original: ', e.features[0]);
 
 		map.flyTo({
 			center: coordinates,
@@ -117,7 +138,7 @@ export class Popups {
 
 		/// Populate the popup and set its coordinates
 		// based on the feature found.
-		return new mapboxgl.Popup({
+		return new mpgl.Popup({
 			closeButton: false,
 			closeOnClick: false
 		})
@@ -154,8 +175,8 @@ export class Popups {
 
 	parseContent({ name, info }: { name: string; info: string }) {
 		var parsed = '';
-		parsed = "<h2 style='padding-bottom: 5px;'>" + name + '</h2><hr>' ?? '';
-		parsed += '<p>' + info + '</p>' ?? '';
+		parsed = `<h2 style='padding-bottom: 5px;'>${name}</h2><hr>`;
+		parsed += `<p>${info}</p>`;
 		return parsed;
 	}
 
