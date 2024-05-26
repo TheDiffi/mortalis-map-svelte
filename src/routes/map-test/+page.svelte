@@ -39,15 +39,10 @@
 		variant="close"
 	/>
 	<MapButton onClick={updateContent}>Change Content Store</MapButton>
-
 </div>
 
 <div class="test-sidebar-container">
-	<Sidebar>
-		<div slot="content">
-			<div>test</div>
-		</div></Sidebar
-	>
+	<Sidebar></Sidebar>
 </div>
 
 <style>
