@@ -6,6 +6,7 @@
 	export let hidden = false;
 	let active = true;
 	let buttonRotation = '0deg';
+	$: position = active ? '0' : '-100%';
 
 	onMount(() => {
 		return rotateButtonOnMobile();
@@ -28,8 +29,8 @@
 	<div class="button-container" class:active>
 		<HamburgerButton variant="arrow-1" {active} rotation={buttonRotation} onClick={toggleSidebar} />
 	</div>
-	{#if !hidden && active}
-		<div id="sidebar">
+	{#if !hidden}
+		<div id="sidebar" class:not-active={!active}>
 			<div id="content-container">
 				{@html $sidebarContent}
 			</div>
@@ -47,9 +48,19 @@
 	}
 
 	#sidebar {
+		position: relative;
 		width: 100%;
 		overflow: scroll;
 		background-color: var(--color-primary-700);
+		left: 0;
+		top: 0;
+		transition:
+			left 0.6s cubic-bezier(0.165, 0.84, 0.44, 1),
+			top 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+	}
+
+	#sidebar.not-active {
+		top: 21vh ;
 	}
 
 	.button-container {
@@ -61,7 +72,6 @@
 	}
 
 	.button-container.active {
-		top: 0;
 		bottom: auto;
 	}
 
@@ -71,6 +81,11 @@
 
 	@media (min-width: 600px) {
 		.sidebar-container {
+			top: 0;
+		}
+
+		#sidebar.not-active {
+			left: -50% ;
 			top: 0;
 		}
 
