@@ -1,6 +1,7 @@
 <script>
 	import HamburgerButton from '$lib/components/Buttons/HamburgerButton.svelte';
 	import { onMount } from 'svelte';
+	import { sidebarContent } from '../../lib/functions/sidebar/sidebarStore';
 
 	export let hidden = false;
 	let active = true;
@@ -14,7 +15,13 @@
 		const handleResize = () => (rotation = window.innerWidth <= 600 ? '-90deg' : '0deg');
 		window.addEventListener('resize', handleResize);
 		handleResize(); // Call once to set initial rotation
-
+		sidebarContent.set(`<div slot="content"><h2 style="padding-bottom: 5px">Welcome to Icewind Dale</h2><hr /><p>
+			Click markers to view more information about the location <br /><br />
+			You can also hold the right key to pan and rotate the map <br /><br />
+			Try out the elements in the corner to see what they do! <br /><br />
+			Also, I've heard that easthaven looks really good from up close ;)
+		</p>
+	</div>`);
 		return () => window.removeEventListener('resize', handleResize);
 	});
 </script>
@@ -26,7 +33,7 @@
 	{#if !hidden && active}
 		<div id="sidebar">
 			<div id="content-container">
-				<slot name="content" />
+				{@html $sidebarContent}
 			</div>
 		</div>
 	{/if}

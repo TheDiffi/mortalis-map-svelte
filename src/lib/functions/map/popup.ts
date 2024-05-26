@@ -1,10 +1,10 @@
-import DOMPurify from 'dompurify';
 import type { Map } from 'mapbox-gl';
 import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
 import type mapboxgl from 'mapbox-gl';
+import { sidebarContent } from '../sidebar/sidebarStore';
+import { sanitizeHtml } from '../common/sanitize';
 
-const MARKER_ICON_URL = 'https://img.icons8.com/material-rounded/24/null/location-marker.png';
 
 const MARKER_LAYERS = [
 	{
@@ -26,7 +26,7 @@ type CustomMapboxEvent = mapboxgl.MapMouseEvent & {
 } & mapboxgl.EventData;
 
 type CustomGeoJsonProperties = {
-	name: string;
+	Name: string;
 	description: string;
 	id: string;
 	popup: boolean;
@@ -78,19 +78,22 @@ export class PopupManager {
 
 		// open the content in the sidebar when a marker is clicked
 		//TODO: refactor: this is marker logic
-		/* map.on('click', markerLayerNames, function (e) {
-			markersOnClick(e);
-		}); */
+		/* map.on('click', markerLayerNames, (e) => {
+			this.markersOnClick(e as CustomMapboxEvent);
+		});  */
 	}
 
 	//TODO: refactor: this is marker logic
-	/* markersOnClick(e) {
+	/* 	markersOnClick(e: CustomMapboxEvent) {
+		console.log('marker clicked', e.features);
+		
 		const sanitizedContent = this.cleanlyParseContent(
-			e.features[0].properties.content ?? '',
+			e.features![0].properties.content ?? '',
 			'No information available'
 		);
-		//sidebar.setContent(sanitizedContent);
-	} */
+
+		this.setSidebarContent(sanitizedContent);	
+	}  */
 
 	townsOnClick(e: CustomMapboxEvent, map: Map) {
 		if (!e.features) {
@@ -107,13 +110,12 @@ export class PopupManager {
 			pitch: 25
 		});
 
-		this.setSidebarContent(e.features[0].properties.content ?? '');
-	}
+		console.log('town clicked', e.features[0]);
 
-	setSidebarContent(unsafeContent: string) {
-		//TODO: sidebar logic
-		/* const sanitizedContent = this.cleanlyParseContent(unsafeContent, 'No information available');
-		sidebar.setContent(sanitizedContent); */
+		sidebarContent.setTitleAndDescription({
+			name: e.features[0].properties?.Name ?? '',
+			description: marked.parse(e.features[0].properties?.description) as string ?? ''
+		});
 	}
 
 	generatePopup(e: CustomMapboxEvent, map: Map) {
@@ -144,15 +146,12 @@ export class PopupManager {
 	getPopupContent(feature: mapboxgl.MapboxGeoJSONFeature) {
 		var popupContent = '';
 		if (['session', 'marker'].includes(feature.properties?.type)) {
-			popupContent = this.cleanlyParseContent(
-				feature.properties?.popup_content ?? '',
-				'No information available'
-			);
+			popupContent = marked.parse(feature.properties?.popup_content ?? '', {
+				async: false
+			}) as string;
 		} else if (feature.layer.id === 'cities_layer') {
-			popupContent = this.parseContent({
-				name: feature.properties?.Name,
-				info: feature.properties?.description
-			});
+			//TODO: refactor
+			popupContent = `<h2 style='padding-bottom: 5px;'>${sanitizeHtml(feature.properties?.name)}</h2><hr><p>${sanitizeHtml(feature.properties?.description)}</p>`;
 		}
 		return popupContent;
 	}
@@ -172,17 +171,5 @@ export class PopupManager {
 			}
 		}
 		return newCoords;
-	}
-
-	parseContent({ name, info }: { name: string; info: string }) {
-		var parsed = '';
-		parsed = `<h2 style='padding-bottom: 5px;'>${name}</h2><hr>`;
-		parsed += `<p>${info}</p>`;
-		return parsed;
-	}
-
-	cleanlyParseContent(content: string, defaultMessage: string) {
-		const sanitizedContent = DOMPurify.sanitize(marked.parse(content, { async: false }) as string);
-		return sanitizedContent === '' ? defaultMessage : sanitizedContent;
 	}
 }
