@@ -21,11 +21,11 @@ const MARKER_LAYERS = [
 	}
 ];
 
-type CustomMapboxEvent = mapboxgl.MapMouseEvent & {
-	features?: CutomMapboxGeoJSONFeature[] | undefined;
+type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {
+	features?: MarkerMapboxGeoJSONFeature[] | undefined;
 } & mapboxgl.EventData;
 
-type CustomGeoJsonProperties = {
+type MarkerGeoJsonProperties = {
 	Name: string;
 	description: string;
 	id: string;
@@ -35,7 +35,7 @@ type CustomGeoJsonProperties = {
 	content?: string;
 };
 
-type CutomMapboxGeoJSONFeature = GeoJSON.Feature<GeoJSON.Point, CustomGeoJsonProperties> & {
+type MarkerMapboxGeoJSONFeature = GeoJSON.Feature<GeoJSON.Point, MarkerGeoJsonProperties> & {
 	layer: mpgl.Layer;
 	source: string;
 	sourceLayer: string;
@@ -60,7 +60,7 @@ export class PopupManager {
 		// Change the cursor to a pointer when the mouse is over the places layer.
 		map.on('mouseenter', markerLayerNames.concat(['cities_layer']), (e) => {
 			map.getCanvas().style.cursor = 'pointer';
-			let newPopup = this.generatePopup(e as CustomMapboxEvent, map);
+			let newPopup = this.generatePopup(e as MarkerMapboxEvent, map);
 			if (newPopup) popup = newPopup;
 		});
 
@@ -73,7 +73,7 @@ export class PopupManager {
 		//TODO: refactor: this is marker logic
 		// open the content in the sidebar when a town is clicked
 		map.on('click', 'cities_layer', (e) => {
-			this.townsOnClick(e as CustomMapboxEvent, map);
+			this.townsOnClick(e as MarkerMapboxEvent, map);
 		});
 
 		// open the content in the sidebar when a marker is clicked
@@ -95,7 +95,7 @@ export class PopupManager {
 		this.setSidebarContent(sanitizedContent);	
 	}  */
 
-	townsOnClick(e: CustomMapboxEvent, map: Map) {
+	townsOnClick(e: MarkerMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
@@ -118,7 +118,7 @@ export class PopupManager {
 		});
 	}
 
-	generatePopup(e: CustomMapboxEvent, map: Map) {
+	generatePopup(e: MarkerMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
@@ -143,7 +143,7 @@ export class PopupManager {
 			.addTo(map);
 	}
 
-	getPopupContent(feature: mapboxgl.MapboxGeoJSONFeature) {
+	getPopupContent(feature: MarkerMapboxGeoJSONFeature) {
 		var popupContent = '';
 		if (['session', 'marker'].includes(feature.properties?.type)) {
 			popupContent = marked.parse(feature.properties?.popup_content ?? '', {
@@ -151,12 +151,12 @@ export class PopupManager {
 			}) as string;
 		} else if (feature.layer.id === 'cities_layer') {
 			//TODO: refactor
-			popupContent = `<h2 style='padding-bottom: 5px;'>${sanitizeHtml(feature.properties?.name)}</h2><hr><p>${sanitizeHtml(feature.properties?.description)}</p>`;
+			popupContent = `<h2 style='padding-bottom: 5px;'>${sanitizeHtml(feature.properties?.Name)}</h2><hr><p>${sanitizeHtml(feature.properties?.description)}</p>`;
 		}
 		return popupContent;
 	}
 
-	adjustCoordsForMultipleFeatures(e: CustomMapboxEvent, coordinates: [number, number]) {
+	adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {
 		// Ensure that if the map is zoomed out such that multiple
 		// copies of the feature are visible, the popup appears
 		// over the copy being pointed to.
