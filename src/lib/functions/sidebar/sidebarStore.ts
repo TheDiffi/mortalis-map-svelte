@@ -1,33 +1,43 @@
 import { writable } from 'svelte/store';
 import { sanitizeHtml } from '../common/sanitize';
 
-const sidebarStore = writable('Test Sidebar Content');
+const INITIAL_SIDEBAR_CONTENT = `<div slot="content">
+<h2 style="padding-bottom: 5px">Welcome to Icewind Dale</h2><hr /><p>
+Click markers to view more information about the location <br /><br />
+You can also hold the right key to pan and rotate the map <br /><br />
+Try out the elements in the corner to see what they do! <br /><br />
+Also, I've heard that easthaven looks really good from up close ;)
+</p>
+</div>`;
 
-export const sidebarContent = {
-	subscribe: sidebarStore.subscribe,
+function createSidebarContent() {
+	const { subscribe, set, update } = writable(INITIAL_SIDEBAR_CONTENT);
 
-	set(content: string, sanitize = true, defaultMessage?: string) {
-		sidebarStore.set(sanitize ? sanitizeHtml(content, defaultMessage) : content);
-	},
+	return {
+		subscribe: subscribe,
 
-	update(updateFunction: (content: string) => string) {
-		sidebarStore.update((before) => sanitizeHtml(updateFunction(before)));
-	},
+		set(content: string, sanitize = true, defaultMessage?: string) {
+			set(sanitize ? sanitizeHtml(content, defaultMessage) : content);
+		},
 
-	setTitleAndDescription({
-		name,
-		description,
-		safeHtml
-	}: {
-		name: string;
-		description: string;
-		safeHtml?: string;
-	}) {
-		let parsed = `<h2 style='padding-bottom: 5px;'>${name}</h2>
-        <hr><p>${description}</p>`;
-		if (safeHtml) parsed += safeHtml;
-		this.set(parsed);
-	}
-};
+		update(updateFunction: (content: string) => string) {
+			update((before) => sanitizeHtml(updateFunction(before)));
+		},
 
-//export const sidebarContent = new SidebarStore();
+		setTitleAndDescription({
+			name,
+			description,
+			safeHtml
+		}: {
+			name: string;
+			description: string;
+			safeHtml?: string;
+		}) {
+			let parsed = `<h2 style='padding-bottom: 5px;'>${name}</h2>
+        					<hr><p>${description}</p>`;
+			if (safeHtml) parsed += safeHtml;
+			this.set(parsed);
+		}
+	};
+}
+export const sidebarContent = createSidebarContent();

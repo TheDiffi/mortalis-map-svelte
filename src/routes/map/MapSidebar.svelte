@@ -5,30 +5,28 @@
 
 	export let hidden = false;
 	let active = true;
-	let rotation = '0deg';
+	let buttonRotation = '0deg';
+
+	onMount(() => {
+		return rotateButtonOnMobile();
+	});
+
+	function rotateButtonOnMobile() {
+		const handleResize = () => (buttonRotation = window.innerWidth <= 600 ? '-90deg' : '0deg');
+		window.addEventListener('resize', handleResize);
+		handleResize(); // Call once to set initial rotation
+
+		return () => window.removeEventListener('resize', handleResize);
+	}
 
 	function toggleSidebar() {
 		active = !active;
 	}
-
-	onMount(() => {
-		const handleResize = () => (rotation = window.innerWidth <= 600 ? '-90deg' : '0deg');
-		window.addEventListener('resize', handleResize);
-		handleResize(); // Call once to set initial rotation
-		sidebarContent.set(`<div slot="content"><h2 style="padding-bottom: 5px">Welcome to Icewind Dale</h2><hr /><p>
-			Click markers to view more information about the location <br /><br />
-			You can also hold the right key to pan and rotate the map <br /><br />
-			Try out the elements in the corner to see what they do! <br /><br />
-			Also, I've heard that easthaven looks really good from up close ;)
-		</p>
-	</div>`);
-		return () => window.removeEventListener('resize', handleResize);
-	});
 </script>
 
 <div class="sidebar-container">
 	<div class="button-container" class:active>
-		<HamburgerButton variant="arrow-1" {active} {rotation} onClick={toggleSidebar} />
+		<HamburgerButton variant="arrow-1" {active} rotation={buttonRotation} onClick={toggleSidebar} />
 	</div>
 	{#if !hidden && active}
 		<div id="sidebar">

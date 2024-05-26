@@ -20,7 +20,7 @@
 
 <div>
 	{#if variant === 'simple'}
-		<Button onClick={handleClick}>
+		<Button on:click={handleClick}>
 			<img
 				style="transform: {active ? `rotate(${rotation})` : `none`}"
 				class="hamburger-button"
@@ -29,7 +29,7 @@
 			/>
 		</Button>
 	{:else}
-		<Button onClick={handleClick}>
+		<Button on:click={handleClick}>
 			<HamburgerIcon {active} {variant} --rotation={rotation}/>
 		</Button>
 	{/if}

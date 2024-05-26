@@ -1,8 +1,7 @@
 <script lang="ts">
-	export let onClick: (e: MouseEvent) => void;
 </script>
 
-<button class="button" on:click={onClick}>
+<button class="button" on:click>
 	<slot></slot>
 </button>
 
