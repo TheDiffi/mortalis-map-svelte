@@ -1,10 +1,9 @@
-import type { Map } from 'mapbox-gl';
+import type { Map, MapboxEvent, MapMouseEvent } from 'mapbox-gl';
 import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
 import type mapboxgl from 'mapbox-gl';
 import { sidebarContent } from '../sidebar/sidebarStore';
 import { sanitizeHtml } from '../common/sanitize';
-
 
 const MARKER_LAYERS = [
 	{
@@ -42,45 +41,38 @@ type MarkerMapboxGeoJSONFeature = GeoJSON.Feature<GeoJSON.Point, MarkerGeoJsonPr
 	state: { [key: string]: any };
 };
 
-export class PopupManager {
+export default class PopupManager {
+	private popup: mpgl.Popup = new mpgl.Popup({
+		closeButton: true,
+		closeOnClick: false
+	}); // Private member for the popup instance
+
 	loadDefault(map: Map) {
 		if (!map) throw new Error('Map is not defined');
 
-		// create a list of all the marker layer names
-		const markerLayerNames = MARKER_LAYERS.reduce<string[]>((acc, marker) => {
-			acc.push(marker.layerName);
-			return acc;
-		}, []);
+		const popupLayers = MARKER_LAYERS.map((layer) => layer.layerName);
+		popupLayers.push('cities_layer');
 
-		var popup = new mpgl.Popup({
-			closeButton: true,
-			closeOnClick: false
-		});
-
-		// Change the cursor to a pointer when the mouse is over the places layer.
-		map.on('mouseenter', markerLayerNames.concat(['cities_layer']), (e) => {
-			map.getCanvas().style.cursor = 'pointer';
-			let newPopup = this.generatePopup(e as MarkerMapboxEvent, map);
-			if (newPopup) popup = newPopup;
-		});
-
-		// Change it back to a pointer when it leaves.
-		map.on('mouseleave', markerLayerNames.concat(['cities_layer']), () => {
-			map.getCanvas().style.cursor = 'grab';
-			if (popup) popup.remove();
-		});
-
-		//TODO: refactor: this is marker logic
-		// open the content in the sidebar when a town is clicked
-		map.on('click', 'cities_layer', (e) => {
-			this.townsOnClick(e as MarkerMapboxEvent, map);
-		});
+		map.on('mouseenter', popupLayers, this.handleMouseEnter.bind(this, map));
+		map.on('mouseleave', popupLayers, this.handleMouseLeave.bind(this, map));
+		map.on('click', 'cities_layer', this.handleTownClick.bind(this, map));
 
 		// open the content in the sidebar when a marker is clicked
 		//TODO: refactor: this is marker logic
 		/* map.on('click', markerLayerNames, (e) => {
 			this.markersOnClick(e as CustomMapboxEvent);
 		});  */
+	}
+
+	private handleMouseEnter(map: Map, e: MapMouseEvent) {
+		map.getCanvas().style.cursor = 'pointer';
+		let newPopup = this.generatePopup(e, map);
+		if (newPopup) this.popup = newPopup;
+	}
+
+	private handleMouseLeave(map: Map, _e: MapMouseEvent) {
+		map.getCanvas().style.cursor = '';
+		if (this.popup.isOpen()) this.popup.remove();
 	}
 
 	//TODO: refactor: this is marker logic
@@ -95,7 +87,16 @@ export class PopupManager {
 		this.setSidebarContent(sanitizedContent);	
 	}  */
 
-	townsOnClick(e: MarkerMapboxEvent, map: Map) {
+	private isMarkerMapboxEvent(e: any): e is MarkerMapboxEvent {
+		return e.features !== undefined;
+	}
+
+	private handleTownClick(map: Map, e: MapMouseEvent) {
+		if (!this.isMarkerMapboxEvent(e)) {
+			console.error('No features found in event', e);
+			return;
+		}
+
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
@@ -114,11 +115,11 @@ export class PopupManager {
 
 		sidebarContent.setTitleAndDescription({
 			name: e.features[0].properties?.Name ?? '',
-			description: marked.parse(e.features[0].properties?.description) as string ?? ''
+			description: (marked.parse(e.features[0].properties?.description) as string) ?? ''
 		});
 	}
 
-	generatePopup(e: MarkerMapboxEvent, map: Map) {
+	private generatePopup(e: MarkerMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
@@ -127,10 +128,7 @@ export class PopupManager {
 		if (!e.features[0].properties.popup) return;
 
 		const feature = e.features[0];
-		var coordinates = feature.geometry.coordinates.slice() as [number, number];
-		var popupContent = this.getPopupContent(feature);
-
-		coordinates = this.adjustCoordsForMultipleFeatures(e, coordinates);
+		const coordinates = feature.geometry.coordinates.slice() as [number, number];
 
 		/// Populate the popup and set its coordinates
 		// based on the feature found.
@@ -138,12 +136,12 @@ export class PopupManager {
 			closeButton: false,
 			closeOnClick: false
 		})
-			.setLngLat(coordinates)
-			.setHTML(popupContent)
+			.setLngLat(this.adjustCoordsForMultipleFeatures(e, coordinates))
+			.setHTML(this.getPopupContent(feature))
 			.addTo(map);
 	}
 
-	getPopupContent(feature: MarkerMapboxGeoJSONFeature) {
+	private getPopupContent(feature: MarkerMapboxGeoJSONFeature) {
 		var popupContent = '';
 		if (['session', 'marker'].includes(feature.properties?.type)) {
 			popupContent = marked.parse(feature.properties?.popup_content ?? '', {
@@ -156,7 +154,7 @@ export class PopupManager {
 		return popupContent;
 	}
 
-	adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {
+	private adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {
 		// Ensure that if the map is zoomed out such that multiple
 		// copies of the feature are visible, the popup appears
 		// over the copy being pointed to.

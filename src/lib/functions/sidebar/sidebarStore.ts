@@ -10,7 +10,7 @@ Also, I've heard that easthaven looks really good from up close ;)
 </p>
 </div>`;
 
-function createSidebarContent() {
+function sidebarContentStore() {
 	const { subscribe, set, update } = writable(INITIAL_SIDEBAR_CONTENT);
 
 	return {
@@ -40,4 +40,4 @@ function createSidebarContent() {
 		}
 	};
 }
-export const sidebarContent = createSidebarContent();
+export const sidebarContent = sidebarContentStore();

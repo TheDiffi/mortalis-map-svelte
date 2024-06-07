@@ -1,16 +1,15 @@
 import featuresJson from '$lib/data/geo/iwd_features.json';
 import { SOURCE_URLS } from '../constants';
 import type { Map } from 'mapbox-gl';
-import { PopupManager } from './popup';
+import PopupManager from './PopupManager';
 
 const ENABLE_DEM = true;
 export type MapStyles = 'Normal' | 'Player';
 
-export class StyleManager {
+export default class StyleManager {
 	current: MapStyles;
 	popupManager: PopupManager;
 	mapbox: Map | undefined;
-
 
 	constructor() {
 		this.current = 'Normal';
@@ -37,9 +36,8 @@ export class StyleManager {
 		}
 	}
 
-
 	setupStyleNormal() {
-		if(this.mapbox === undefined) throw new Error('Mapbox not initialized');
+		if (this.mapbox === undefined) throw new Error('Mapbox not initialized');
 
 		console.log('Loading Sources: Normal');
 		try {
@@ -51,21 +49,20 @@ export class StyleManager {
 		} catch (error) {
 			console.log('features source already loaded' + error);
 		}
-	
+
 		console.log('Rendering layers: Normal');
 		// loads the 3d terrain
 		if (ENABLE_DEM) this.addDEM();
 		// Add daytime fog
 		this.addFog();
-	
+
 		// renders the towns layer
 		this.loadTowns();
-	
+
 		// Create a popup, but don't add it to the map yet.
 		this.popupManager.loadDefault(this.mapbox);
 	}
-	
-	
+
 	setupStylePlayer() {
 		console.log('rendering player layers');
 		// loads the 3d terrain
@@ -73,9 +70,9 @@ export class StyleManager {
 		// Add daytime fog
 		this.addFog();
 	}
-	
+
 	addDEM() {
-		if(this.mapbox === undefined) throw new Error('Mapbox not initialized');
+		if (this.mapbox === undefined) throw new Error('Mapbox not initialized');
 
 		try {
 			// loads the DEM source -> dem
@@ -86,14 +83,14 @@ export class StyleManager {
 		} catch (error) {
 			console.log('DEM source already loaded' + error);
 		}
-	
+
 		// add the DEM source as a terrain layer with exaggerated height
 		this.mapbox.setTerrain({ source: 'dem', exaggeration: 0.0002 });
 		console.log('terrain added');
 	}
-	
+
 	addFog() {
-		if(this.mapbox === undefined) throw new Error('Mapbox not initialized');
+		if (this.mapbox === undefined) throw new Error('Mapbox not initialized');
 
 		this.mapbox.setFog({
 			range: [-1, 5],
@@ -104,13 +101,13 @@ export class StyleManager {
 			'star-intensity': 0.0
 		});
 	}
-	
+
 	loadTowns() {
-		if(this.mapbox === undefined) throw new Error('Mapbox not initialized');
-		
+		if (this.mapbox === undefined) throw new Error('Mapbox not initialized');
+
 		// layers are the visual representation of the data
 		console.log('Loading Towns Layer');
-	
+
 		this.mapbox.addLayer({
 			id: 'cities_layer',
 			type: 'circle',
@@ -133,5 +130,3 @@ export class StyleManager {
 		});
 	}
 }
-
-

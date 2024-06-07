@@ -1,9 +1,9 @@
 import { SOURCE_URLS } from '$lib/functions/constants';
 import iwd_features_json from '$lib/data/geo/iwd_features.json';
 import mapboxgl from 'mapbox-gl';
-import { StyleManager } from './styles';
+import StyleManager from './StylesManager';
 
-export class MapManager {
+export default class MapManager {
 	mapbox: mapboxgl.Map | undefined;
 	styles: StyleManager;
 	containerId: string;
@@ -47,14 +47,14 @@ export class MapManager {
 	}
 
 	onLoad() {
-		if(this.mapbox === undefined) return;
+		if (this.mapbox === undefined) return;
 		/* // render map controls
 		loadMapControls(this.mapbox, this.controls, this.changeStyle);
 
 		this.markerManager = new MarkerManager(this);
 		this.markerManager.generateMarkerLayerButtons(); */
 		this.styles.initStyles(this.mapbox);
-	};
+	}
 
 	loadNormalStyle() {
 		console.log('Loading Sources: Normal');
@@ -72,14 +72,14 @@ export class MapManager {
 		// loads the 3d terrain
 		this.setDEM(true);
 		// Add daytime fog
-		this.setFog(true);
+		this.setFog();
 	}
 
 	loadPlayerStyle() {
 		// loads the 3d terrain
 		this.setDEM(true);
 		// Add daytime fog
-		this.setFog(true);
+		this.setFog();
 	}
 
 	setDEM(active: boolean) {
@@ -100,8 +100,10 @@ export class MapManager {
 		console.log('DEM set to: ' + active);
 	}
 
-	setFog(active: boolean) {
-		this.mapbox?.setFog({
+	setFog() {
+		if (!this.mapbox) return;
+
+		this.mapbox.setFog({
 			range: [-1, 5],
 			'horizon-blend': 0.2,
 			color: 'white',
@@ -111,7 +113,3 @@ export class MapManager {
 		});
 	}
 }
-
-
-
-export default MapManager;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MapButton from '$lib/components/Buttons/MapButton.svelte';
 import Spinner from '$lib/components/LoadingSpinner.svelte';
-	import MapManager from '../../lib/functions/map/mapManager';
+	import MapManager from '../../lib/functions/map/MapManager';
 	import { onMount } from 'svelte';
 	import CornerElement from './MapCornerElement.svelte';
 
