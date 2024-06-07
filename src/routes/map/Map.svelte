@@ -20,7 +20,7 @@ import Spinner from '$lib/components/LoadingSpinner.svelte';
 <div id="map-container">
 	<div id="map"></div>
 	
-	<CornerElement corner="bottom-left" style="padding: 10px;"><MapButton onClick={()=>{}}>Test</MapButton>  </CornerElement>
+	<CornerElement corner="bottom-left" style="padding: 10px;"><MapButton on:click={()=>{}}>Test</MapButton>  </CornerElement>
 	{#if isLoading}
 		<Spinner />
 	{/if}

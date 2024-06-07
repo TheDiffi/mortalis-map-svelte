@@ -1,45 +1,11 @@
-import type { Map, MapboxEvent, MapMouseEvent } from 'mapbox-gl';
+import type { Map, MapMouseEvent } from 'mapbox-gl';
 import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
-import type mapboxgl from 'mapbox-gl';
 import { sidebarContent } from '../sidebar/sidebarStore';
 import { sanitizeHtml } from '../common/sanitize';
+import { MARKER_LAYERS } from '../constants';
+import type { IWD_FEATURE_MarkerMapboxEvent, IWD_FEATURE_MarkerMapboxGeoJSONFeature } from './markers/types';
 
-const MARKER_LAYERS = [
-	{
-		type: 'marker',
-		style: 'symbol',
-		symbol: 'marker-sb-1',
-		layerName: 'markers1'
-	},
-	{
-		type: 'session',
-		style: 'symbol',
-		symbol: 'marker-sb-1',
-		layerName: 'markers2'
-	}
-];
-
-type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {
-	features?: MarkerMapboxGeoJSONFeature[] | undefined;
-} & mapboxgl.EventData;
-
-type MarkerGeoJsonProperties = {
-	Name: string;
-	description: string;
-	id: string;
-	popup: boolean;
-	type: string;
-	popup_content?: string;
-	content?: string;
-};
-
-type MarkerMapboxGeoJSONFeature = GeoJSON.Feature<GeoJSON.Point, MarkerGeoJsonProperties> & {
-	layer: mpgl.Layer;
-	source: string;
-	sourceLayer: string;
-	state: { [key: string]: any };
-};
 
 export default class PopupManager {
 	private popup: mpgl.Popup = new mpgl.Popup({
@@ -87,7 +53,7 @@ export default class PopupManager {
 		this.setSidebarContent(sanitizedContent);	
 	}  */
 
-	private isMarkerMapboxEvent(e: any): e is MarkerMapboxEvent {
+	private isMarkerMapboxEvent(e: any): e is IWD_FEATURE_MarkerMapboxEvent {
 		return e.features !== undefined;
 	}
 
@@ -119,7 +85,7 @@ export default class PopupManager {
 		});
 	}
 
-	private generatePopup(e: MarkerMapboxEvent, map: Map) {
+	private generatePopup(e: IWD_FEATURE_MarkerMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
@@ -141,7 +107,7 @@ export default class PopupManager {
 			.addTo(map);
 	}
 
-	private getPopupContent(feature: MarkerMapboxGeoJSONFeature) {
+	private getPopupContent(feature: IWD_FEATURE_MarkerMapboxGeoJSONFeature) {
 		var popupContent = '';
 		if (['session', 'marker'].includes(feature.properties?.type)) {
 			popupContent = marked.parse(feature.properties?.popup_content ?? '', {
@@ -154,7 +120,7 @@ export default class PopupManager {
 		return popupContent;
 	}
 
-	private adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {
+	private adjustCoordsForMultipleFeatures(e: IWD_FEATURE_MarkerMapboxEvent, coordinates: [number, number]) {
 		// Ensure that if the map is zoomed out such that multiple
 		// copies of the feature are visible, the popup appears
 		// over the copy being pointed to.

@@ -2,15 +2,18 @@ import { SOURCE_URLS } from '$lib/functions/constants';
 import iwd_features_json from '$lib/data/geo/iwd_features.json';
 import mapboxgl from 'mapbox-gl';
 import StyleManager from './StylesManager';
+import MarkerManager from './MarkerManager';
 
 export default class MapManager {
 	mapbox: mapboxgl.Map | undefined;
 	styles: StyleManager;
+	markerManager: MarkerManager;
 	containerId: string;
 
 	constructor(containerId: string, token: string) {
 		mapboxgl.accessToken = token;
 		this.styles = new StyleManager();
+		this.markerManager = new MarkerManager();
 		this.containerId = containerId;
 	}
 
@@ -48,11 +51,11 @@ export default class MapManager {
 
 	onLoad() {
 		if (this.mapbox === undefined) return;
-		/* // render map controls
-		loadMapControls(this.mapbox, this.controls, this.changeStyle);
+		 
+		//loadMapControls(this.mapbox, this.controls, this.changeStyle); //TODO
 
-		this.markerManager = new MarkerManager(this);
-		this.markerManager.generateMarkerLayerButtons(); */
+		this.markerManager.loadAllMarkers(this.mapbox);
+
 		this.styles.initStyles(this.mapbox);
 	}
 
