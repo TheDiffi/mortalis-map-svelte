@@ -8,7 +8,7 @@
 				"title": "City of Hatbrim",
 				"image": "INSERT POPUP HTML HERE",
 				"type": "marker",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Artfast\nArfast has seen his fair share of battles.",
 				"content": "## Artfast\nArfast has seen his fair share of battles. Standing at over 2 metres tall, he boasts the body of a heavy strongman. His body is covered in tattoos of wolves, divine runes, and the holy symbol of Silvanus.\n## Background\nHe lived with his warrior tribe, when one day they were chased from their own homeland by the forces of a mighty kingdom. Arfast made his name as a mercenary, a furious warrior. His faith in Silvanus as well as his fury is what kept him alive up until now and he will continue fighting to please his god. "
 			},
@@ -20,7 +20,7 @@
 				"title": "City of Hatbrim",
 				"image": "INSERT POPUP HTML HERE",
 				"type": "marker",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "# Hello\nNo content yet",
 				"content": "# Hello\nNo content yet"
 			},
@@ -32,7 +32,7 @@
 				"title": "City of Hatbrim",
 				"image": "INSERT POPUP HTML HERE",
 				"type": "marker",
-				"popup": false
+				"hasPopup": false
 			},
 			"geometry": { "type": "Point", "coordinates": [0.01973847265593, -0.025595685921349] }
 		},
@@ -42,7 +42,7 @@
 				"title": "S48",
 				"image": "",
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Dreams of Ice",
 				"content": "- dreams are dimmed because of Herbert\n\t- scenes are always with a cliff and a wide lake\n- Lynn' sister is halfway to the gods\n\t- protectec through a stone that was once liquid\n- are [[Morrigan]] and the glacier connected?\n- book (diary) about an expedition to the glacier\n\t- led by Vonto (previous adventueres guild leader)\n\t- were able to see towers through the ice \n\t- couldn't get through the ice\n\t- connection to magic stronger than ever\n\t- wizards opened themselves to the supernatural\n\t- any spell that was cast eventually got out of hand\n\t- sounds coming from the glacier sounded like whale calls\n\t- two of the adventurers woke up drained of blood and turned to stone\n\t- writing gets less readable, turns to red (probably written with blood) then follow a few empty pages\n\t- some managed to flee\n\t- embodiement of the god themelves was in the glacier\n- dream of nisha\n\t- falling towards a lake that has a crack in the middle\n\t- there are a lot of people on the ice\n\t- 'betrayal of her and you in your own empire'\n\t- not touching the ice\n- "
 			},
@@ -55,7 +55,7 @@
 				"title": "S25",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "#### we're up all night to get lucky",
 				"content": "# we're up all night to get lucky"
 			},
@@ -67,7 +67,7 @@
 				"title": "S51",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "#Oh baby it's cold inside",
 				"content": "> *Wizard's head in hand, we stormed into Elai's room, throwing it on the floor at her feet. Then we finally had a talk about how she can help me reach my mother, unbeknownst to Elai, to finally kill her. She told us the next meditation would take place the next night, so we spend our night and day with some meditation and trying to kind of find some grounding in our souls. Letting in the cold was not as easy as it was before. Maybe that's a good sign. \n> The next evening we went out to the lake with some others and Elai to do the dream travel. Turns out it was actually planar travel and we landed in Stygia, where Levistus is being held captive by Asmodeus. That is why the cult is there and why they brought me there as well. To free him.\n> Upon entering the town, Elai showed us to our accomodation for the time being, however on the way I saw something extremely disturbing. My childhood home is standing in their base. Looking like it must have around the time of my birth. When my mother wasn't as crazy as she is now. \n> When it was time for the communal dinner, we sent Brondir and Toni to eat and tell everyone I have visions of Levistus while in reality Lynn and I went to investigate that godsforsaken house.*\n"
 			},
@@ -79,7 +79,7 @@
 				"title": "S50",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "# Snobby wizards make good throphies",
 				"content": "- cult people are scared to talk to us \n\t- not allowed to talk to us\n\t- build tents for slaves that came from the south\n- went to the wizards lair and encountered him\n\t- he made fun of Nisha and said she has no power\n\t- so we killed him\n\t- lots of nice loot\n\t\t- books about [[the elder brain]], the [[ooblexes]] and [[Herbert]]"
 			},
@@ -91,7 +91,7 @@
 				"title": "S49",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "# Digging your own Grave",
 				"content": "# Digging your own Grave \\n - visiting [[valindras grave]] \n\t- when [[toni]] cast speak with dead, [[Valindra]]s crystals started to glow and they both took damage\n\t\t- it probably disturbed to crystals trying to keep her soul in her body\n\t- owl mask over her head (-> auriel)\n\t- six animal masks around her head\n\t- we pulled the stone golems away\n- [[dougans hole]]\n\t- people look at us weirdly\n\t- talking with Elai proved she's very mad\n\t\t- we didn't get rid of the red wizard problem\n\t\t- have to get rid of him\n\t\t- [[the red wizard (complete)]]"
 			},
@@ -103,7 +103,7 @@
 				"title": "S47",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## The third sibling",
 				"content": "- meeting the third of the [[ooblexes]]\n- going back to Khadirs lair to search for something\n- we got lost in a maze of fleshy mushroom\n\t- didn't go near Levin, probably because of Tonis magic\n- room with tanks\n\t- white-blue-ish strings -> organic\n- TPK after Sefek fight\n- we got flooded with memories of the dungeon\n\t- memories of a duergar\n\t\t- Khadir and Morrigan next to a person with a cut open skull\n\t\t- asking themselves where the connection between the astral plane and our plane\n\t\t- need to find a place where the connection is thinner\n\t- Levin's last memories\n\t\t- asks himself if the suffering is finally over"
 			},
@@ -115,7 +115,7 @@
 				"title": "S25",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## we're up all night to get lucky",
 				"content": null
 			},
@@ -127,7 +127,7 @@
 				"title": "S38",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Caer Konig is burning",
 				"content": "## Caer Konig is burning"
 			},
@@ -139,7 +139,7 @@
 				"title": "S37",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## There was once easthaven",
 				"content": "## There was once easthaven"
 			},
@@ -151,7 +151,7 @@
 				"title": "S41",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "##  M O T H E R",
 				"content": "##  M O T H E R"
 			},
@@ -163,7 +163,7 @@
 				"title": "S42",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## To hell and back",
 				"content": "## To hell and back"
 			},
@@ -175,7 +175,7 @@
 				"title": "S45",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Cult squared",
 				"content": "## Cult squared"
 			},
@@ -187,7 +187,7 @@
 				"title": "S47",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## The third sibling",
 				"content": "## The third sibling"
 			},
@@ -199,7 +199,7 @@
 				"title": "S26",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## A song of ice and lightning",
 				"content": "## A song of ice and lightning"
 			},
@@ -211,7 +211,7 @@
 				"title": "S 28",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Dying on an axebeak farm",
 				"content": "## Dying on an axebeak farm"
 			},
@@ -223,7 +223,7 @@
 				"title": "S29",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Old friends and new foes \\n Wait... where is Herbert",
 				"content": "# Old friends and new foes \\n Wait... where is Herbert"
 			},
@@ -235,7 +235,7 @@
 				"title": "S30 ",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## A long needed talk",
 				"content": "# A long needed talk"
 			},
@@ -247,7 +247,7 @@
 				"title": "S31",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## The search for herbert begins",
 				"content": "# The search for herbert begins"
 			},
@@ -259,7 +259,7 @@
 				"title": "S32",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## The Child has lost control",
 				"content": "# The Child has lost control"
 			},
@@ -271,7 +271,7 @@
 				"title": "S33",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## A trip down good 'ole memory lane",
 				"content": "# A trip down good 'ole memory lane"
 			},
@@ -283,7 +283,7 @@
 				"title": "S34",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Parting ways",
 				"content": "# Parting ways"
 			},
@@ -295,7 +295,7 @@
 				"title": "S35",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Return of the queen",
 				"content": "# Return of the queen"
 			},
@@ -307,7 +307,7 @@
 				"title": "S36",
 				"image": null,
 				"type": "session",
-				"popup": true,
+				"hasPopup": true,
 				"popup_content": "## Blood upon the snow",
 				"content": "# Blood upon the snow"
 			},

@@ -4,13 +4,13 @@ export interface MarkerGeoJson extends GeoJSON.FeatureCollection<GeoJSON.Point, 
 	name: 'markers';
 }
 
-export type MarkerFeatures = GeoJSON.Feature<GeoJSON.Point, MarkerProperties>[];
+export type MarkerFeature = GeoJSON.Feature<GeoJSON.Point, MarkerProperties>;
 
-type MarkerProperties = {
+export type MarkerProperties = {
 	title: string;
 	image: string | null;
 	type: MarkerTypes;
-	popup: true;
+	hasPopup: true;
 	popup_content: string;
 	content: string;
 };
@@ -18,6 +18,7 @@ type MarkerProperties = {
 //----------------------------
 
 export type IWDFeature = GeoJSON.Feature<GeoJSON.Geometry, IWDFeatureProperties>;
+export type IWDFeatureTown = GeoJSON.Feature<GeoJSON.Point, IWDFeatureProperties>;
 
 export type IWDFeatureProperties = {
 	id: string;
@@ -47,3 +48,5 @@ export type MarkerEvent<T> = T & {
 	sourceLayer: string;
 	state: { [key: string]: any };
 };
+
+

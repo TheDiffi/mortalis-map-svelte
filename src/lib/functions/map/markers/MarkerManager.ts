@@ -1,8 +1,8 @@
 import markerJson from '$lib/data/geo/markers.json';
 import { MARKER_ICON_URL, MARKER_LAYERS } from '../../constants';
 import type { AnyLayer, Map, SymbolLayer } from 'mapbox-gl';
-import type { MarkerGeoJson, MarkerTypes, MarkerFeatures } from '../geoJson/types';
-import type { MarkerLayer } from './types';
+import type { MarkerGeoJson, MarkerFeature } from '../geoJson/types';
+import type { MarkerLayer, MarkerTypes } from './types';
 
 //TODO: refactor this to a svelete component
 // class LayerButton {
@@ -109,7 +109,7 @@ class MarkerManager {
 	};
 
 	filterMarkersByType = (geojson: MarkerGeoJson, type: MarkerTypes) => {
-		const markers: MarkerFeatures = [];
+		const markers: MarkerFeature[] = [];
 
 		geojson.features.forEach((feature) => {
 			if (feature.properties.type === type) {
@@ -119,8 +119,6 @@ class MarkerManager {
 
 		return markers;
 	};
-
-   
 }
 
 export default MarkerManager;
