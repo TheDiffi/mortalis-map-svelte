@@ -4,8 +4,11 @@ import { marked } from 'marked';
 import { sidebarContent } from '../sidebar/sidebarStore';
 import { sanitizeHtml } from '../common/sanitize';
 import { MARKER_LAYERS } from '../constants';
-import type { IWD_FEATURE_MarkerMapboxEvent, IWD_FEATURE_MarkerMapboxGeoJSONFeature } from './markers/types';
+import type { IWDFeature, IWDFeatureProperties, MarkerEvent } from './geoJson/types';
 
+type IWDFeatureMarkerMapboxEvent = mapboxgl.MapMouseEvent & {
+	features?: MarkerEvent<GeoJSON.Feature<GeoJSON.Point, IWDFeatureProperties>>[] | undefined;
+} & mapboxgl.EventData;
 
 export default class PopupManager {
 	private popup: mpgl.Popup = new mpgl.Popup({
@@ -25,12 +28,29 @@ export default class PopupManager {
 
 		// open the content in the sidebar when a marker is clicked
 		//TODO: refactor: this is marker logic
-		/* map.on('click', markerLayerNames, (e) => {
-			this.markersOnClick(e as CustomMapboxEvent);
-		});  */
+		map.on(
+			'click',
+			popupLayers.filter((l) => l !== 'cities_layer'),
+			(e) => {
+				console.log('marker clicked', e.features);
+
+				if (!this.isMarkerMapboxEvent(e)) {
+					console.error('No features found in event', e);
+					return;
+				}
+				sidebarContent.set(
+					marked.parse(e.features![0].properties.content ?? 'No Content', {
+						async: false
+					}) as string,
+					true
+				);
+			}
+		);
 	}
 
 	private handleMouseEnter(map: Map, e: MapMouseEvent) {
+		console.log('mouse enter', e);
+		
 		map.getCanvas().style.cursor = 'pointer';
 		let newPopup = this.generatePopup(e, map);
 		if (newPopup) this.popup = newPopup;
@@ -41,19 +61,7 @@ export default class PopupManager {
 		if (this.popup.isOpen()) this.popup.remove();
 	}
 
-	//TODO: refactor: this is marker logic
-	/* 	markersOnClick(e: CustomMapboxEvent) {
-		console.log('marker clicked', e.features);
-		
-		const sanitizedContent = this.cleanlyParseContent(
-			e.features![0].properties.content ?? '',
-			'No information available'
-		);
-
-		this.setSidebarContent(sanitizedContent);	
-	}  */
-
-	private isMarkerMapboxEvent(e: any): e is IWD_FEATURE_MarkerMapboxEvent {
+	private isMarkerMapboxEvent(e: any): e is IWDFeatureMarkerMapboxEvent {
 		return e.features !== undefined;
 	}
 
@@ -80,24 +88,22 @@ export default class PopupManager {
 		console.log('town clicked', e.features[0]);
 
 		sidebarContent.setTitleAndDescription({
-			name: e.features[0].properties?.Name ?? '',
+			name: e.features[0].properties?.name ?? '',
 			description: (marked.parse(e.features[0].properties?.description) as string) ?? ''
 		});
 	}
 
-	private generatePopup(e: IWD_FEATURE_MarkerMapboxEvent, map: Map) {
+	private generatePopup(e: IWDFeatureMarkerMapboxEvent, map: Map) {
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
 		}
 
-		if (!e.features[0].properties.popup) return;
+		if (!e.features[0].properties.hasPopup) return;
 
 		const feature = e.features[0];
 		const coordinates = feature.geometry.coordinates.slice() as [number, number];
 
-		/// Populate the popup and set its coordinates
-		// based on the feature found.
 		return new mpgl.Popup({
 			closeButton: false,
 			closeOnClick: false
@@ -107,20 +113,31 @@ export default class PopupManager {
 			.addTo(map);
 	}
 
-	private getPopupContent(feature: IWD_FEATURE_MarkerMapboxGeoJSONFeature) {
-		var popupContent = '';
-		if (['session', 'marker'].includes(feature.properties?.type)) {
-			popupContent = marked.parse(feature.properties?.popup_content ?? '', {
-				async: false
-			}) as string;
+	private getPopupContent(feature: MarkerEvent<IWDFeature>): string {
+		let popupContent = '';
+		const { type, popup_content, name } = feature.properties ?? {};
+
+		if (['session', 'marker'].includes(type)) {
+			popupContent = marked.parse(popup_content ?? 'test', { async: false }) as string;
+			console.log('popup content', popupContent);
 		} else if (feature.layer.id === 'cities_layer') {
-			//TODO: refactor
-			popupContent = `<h2 style='padding-bottom: 5px;'>${sanitizeHtml(feature.properties?.Name)}</h2><hr><p>${sanitizeHtml(feature.properties?.description)}</p>`;
+			popupContent = this.generateCitiesLayerContent(name, popup_content);
 		}
+
 		return popupContent;
 	}
 
-	private adjustCoordsForMultipleFeatures(e: IWD_FEATURE_MarkerMapboxEvent, coordinates: [number, number]) {
+	private generateCitiesLayerContent(name?: string, popup_content?: string): string {
+		const sanitizedTitle = sanitizeHtml(name ?? '');
+		const sanitizedContent = sanitizeHtml(popup_content ?? '');
+
+		return `<h2 style='padding-bottom: 5px;'>${sanitizedTitle}</h2><hr><p>${sanitizedContent}</p>`;
+	}
+
+	private adjustCoordsForMultipleFeatures(
+		e: IWDFeatureMarkerMapboxEvent,
+		coordinates: [number, number]
+	) {
 		// Ensure that if the map is zoomed out such that multiple
 		// copies of the feature are visible, the popup appears
 		// over the copy being pointed to.

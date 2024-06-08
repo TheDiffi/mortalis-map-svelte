@@ -1,4 +1,6 @@
 {
+	"type": "FeatureCollection",
+	"name": "iwd_features",
 	"features": [
 		{
 			"type": "Feature",
@@ -470,7 +472,7 @@
 				"Name": "Caer-Konig",
 				"type": "city_m",
 				"description": "The town straddled the round harbor in a semicircle, with a line of buildings at the edge of the harbor, an uphill slope, and a circular round with buildings.",
-				"true": "true"
+				"popup": "true"
 			},
 			"geometry": {
 				"coordinates": [0.025569, -0.019426],
@@ -1737,6 +1739,5 @@
 			},
 			"id": "fc04b327919330e83ab298f8192e902e"
 		}
-	],
-	"type": "FeatureCollection"
+	]
 }

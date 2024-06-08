@@ -1,9 +1,8 @@
 import markerJson from '$lib/data/geo/markers.json';
-import mapboxgl from 'mapbox-gl';
-import { MARKER_ICON_URL, MARKER_LAYERS } from '../constants';
-import type MapManager from './MapManager';
-import type { AnyLayer, Map, Marker, SymbolLayer } from 'mapbox-gl';
-import type { MarkerFeatures, MarkerGeoJson, MarkerLayer, MarkerTypes } from './markers/types';
+import { MARKER_ICON_URL, MARKER_LAYERS } from '../../constants';
+import type { AnyLayer, Map, SymbolLayer } from 'mapbox-gl';
+import type { MarkerGeoJson, MarkerTypes, MarkerFeatures } from '../geoJson/types';
+import type { MarkerLayer } from './types';
 
 //TODO: refactor this to a svelete component
 // class LayerButton {

@@ -2,6 +2,7 @@ import featuresJson from '$lib/data/geo/iwd_features.json';
 import { SOURCE_URLS } from '../constants';
 import type { Map } from 'mapbox-gl';
 import PopupManager from './PopupManager';
+import { IWDFeatures, type IWDFeaturesGeoJson } from './geoJson/IWDFeatures';
 
 const ENABLE_DEM = true;
 export type MapStyles = 'Normal' | 'Player';
@@ -40,14 +41,17 @@ export default class StyleManager {
 		if (this.mapbox === undefined) throw new Error('Mapbox not initialized');
 
 		console.log('Loading Sources: Normal');
+		const features = new IWDFeatures(featuresJson as IWDFeaturesGeoJson);
+		console.log('Features loaded', features);
+		
 		try {
 			// loads all features -> features
 			this.mapbox.addSource('features', {
 				type: 'geojson',
-				data: featuresJson as any
+				data: features
 			});
 		} catch (error) {
-			console.log('features source already loaded' + error);
+			console.error('Error loding Source', error);
 		}
 
 		console.log('Rendering layers: Normal');

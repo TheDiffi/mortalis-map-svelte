@@ -2,7 +2,8 @@ import { SOURCE_URLS } from '$lib/functions/constants';
 import iwd_features_json from '$lib/data/geo/iwd_features.json';
 import mapboxgl from 'mapbox-gl';
 import StyleManager from './StylesManager';
-import MarkerManager from './MarkerManager';
+import MarkerManager from './markers/MarkerManager';
+import { IWDFeatures, type IWDFeaturesGeoJson } from './geoJson/IWDFeatures';
 
 export default class MapManager {
 	mapbox: mapboxgl.Map | undefined;
@@ -19,10 +20,10 @@ export default class MapManager {
 
 	initMap() {
 		this.mapbox = new mapboxgl.Map({
-			container: 'map', // container ID
-			style: 'mapbox://styles/thediffi/cld7hz283000j01ockqljc73u', // style URL
-			center: [0.02, -0.02], // starting position [lng, lat]
-			zoom: 15.5, // starting zoom
+			container: 'map',
+			style: 'mapbox://styles/thediffi/cld7hz283000j01ockqljc73u',
+			center: [0.02, -0.02],
+			zoom: 15.5,
 			minZoom: 14,
 			pitch: 25
 		});
@@ -34,7 +35,16 @@ export default class MapManager {
 		console.log('mapbox loaded: ', this.mapbox);
 	}
 
-	loadStyle(stylename: string) {
+	onLoad() {
+		if (this.mapbox === undefined) return;
+
+		this.styles.initStyles(this.mapbox);
+		//loadMapControls(this.mapbox, this.controls, this.changeStyle); //TODO
+
+		this.markerManager.loadAllMarkers(this.mapbox);
+	}
+
+/* 	loadStyle(stylename: string) {
 		console.log('Setting up style: ' + stylename);
 
 		switch (stylename) {
@@ -49,29 +59,20 @@ export default class MapManager {
 		}
 	}
 
-	onLoad() {
-		if (this.mapbox === undefined) return;
-		 
-		//loadMapControls(this.mapbox, this.controls, this.changeStyle); //TODO
-
-		this.markerManager.loadAllMarkers(this.mapbox);
-
-		this.styles.initStyles(this.mapbox);
-	}
-
 	loadNormalStyle() {
 		console.log('Loading Sources: Normal');
+		const features = new IWDFeatures(iwd_features_json as IWDFeaturesGeoJson);
+		console.log('features', features);
+
 		try {
-			// loads all features -> features
 			this.mapbox?.addSource('features', {
 				type: 'geojson',
-				data: iwd_features_json as any
+				data: features
 			});
 		} catch (error) {
 			console.log('features source already loaded' + error);
 		}
 
-		console.log('Rendering layers: Normal');
 		// loads the 3d terrain
 		this.setDEM(true);
 		// Add daytime fog
@@ -114,5 +115,5 @@ export default class MapManager {
 			'space-color': '#d8f2ff',
 			'star-intensity': 0.0
 		});
-	}
+	} */
 }
