@@ -1,4 +1,4 @@
-import { type IWDFeatureProperties, type IWDFeature, IWDFeatureTypes } from './types';
+import { type IWDFeature, type IWDFeatureProperties, IWDFeatureTypes } from './types';
 
 export interface IWDFeaturesGeoJson
 	extends GeoJSON.FeatureCollection<GeoJSON.Geometry, IWDFeatureGeoJsonProperties> {

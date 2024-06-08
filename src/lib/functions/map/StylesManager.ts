@@ -1,6 +1,6 @@
 import featuresJson from '$lib/data/geo/iwd_features.json';
-import { SOURCE_URLS } from '../constants';
 import type { Map } from 'mapbox-gl';
+import { SOURCE_URLS } from '../constants';
 import PopupManager from './PopupManager';
 import { IWDFeatures, type IWDFeaturesGeoJson } from './geoJson/IWDFeatures';
 

@@ -1,7 +1,7 @@
 import markerJson from '$lib/data/geo/markers.json';
-import { MARKER_ICON_URL, MARKER_LAYERS } from '../../constants';
 import type { AnyLayer, Map, SymbolLayer } from 'mapbox-gl';
-import type { MarkerGeoJson, MarkerFeature } from '../geoJson/types';
+import { MARKER_ICON_URL, MARKER_LAYERS } from '../../constants';
+import type { MarkerFeature, MarkerGeoJson } from '../geoJson/types';
 import type { MarkerLayer, MarkerTypes } from './types';
 
 //TODO: refactor this to a svelete component

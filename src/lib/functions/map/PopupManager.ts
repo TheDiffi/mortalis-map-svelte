@@ -1,16 +1,13 @@
 import type { Map, MapMouseEvent } from 'mapbox-gl';
 import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
-import { sidebarContent } from '../sidebar/sidebarStore';
 import { sanitizeHtml } from '../common/sanitize';
 import { MARKER_LAYERS } from '../constants';
+import { sidebarContent } from '../sidebar/sidebarStore';
 import type {
-	IWDFeature,
-	IWDFeatureProperties,
 	IWDFeatureTown,
 	MarkerEvent,
-	MarkerFeature,
-	MarkerProperties
+	MarkerFeature
 } from './geoJson/types';
 
 type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {
