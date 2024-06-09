@@ -1,7 +1,8 @@
 import { type MarkerFeature, type MarkerFeatureProperties } from './types';
 import markerJson from '$lib/data/geo/markers.json';
 import { MarkerTypes } from '../markers/types';
-import { randomUUID } from 'crypto';
+import { nanoid } from 'nanoid';
+
 
 export interface MarkerFeaturesGeoJson
 	extends GeoJSON.FeatureCollection<GeoJSON.Point, MarkerFeatureGeoJsonProperties> {
@@ -52,7 +53,7 @@ export class MarkerFeatures
 		}
 
 		const newProps: MarkerFeatureProperties = {
-			tempId: randomUUID(),
+			tempId: nanoid(),
 			type: this.parseType(f.type),
 			name: f.name ?? f.title ?? '',
 			image: f.image ?? null,
