@@ -1,18 +1,18 @@
 <script lang="ts">
-	type Corner = 'top-left' | 'bottom-left' | 'bottom right' | 'top-right';
+	type Corner = 'top-left' | 'bottom-left' | 'bottom-right' | 'top-right';
 
 	export let corner: Corner;
-    export let style = '';
-
+	export let style = '';
 </script>
 
-<div class="corner {corner}" style={style}>
+<div class="corner {corner}" {style}>
 	<slot />
 </div>
 
 <style>
 	.corner {
 		position: absolute;
+		padding: 10px;
 	}
 
 	.top-right {

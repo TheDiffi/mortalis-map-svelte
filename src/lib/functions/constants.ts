@@ -1,4 +1,3 @@
-import { MarkerTypes, type MarkerLayer } from './map/markers/types';
 
 export const SOURCE_URLS = {
 	NEW_HM: 'mapbox://thediffi.2pvcnilz',
@@ -20,17 +19,4 @@ export const TO_METER = 16;
 export const MARKER_ICON_URL =
 	'https://img.icons8.com/material-rounded/24/null/location-marker.png';
 
-export const MARKER_LAYERS: MarkerLayer[] = [
-	{
-		type: MarkerTypes.Marker,
-		style: 'symbol',
-		symbol: 'marker-sb-1',
-		layerName: 'markers1'
-	},
-	{
-		type: MarkerTypes.Session,
-		style: 'symbol',
-		symbol: 'marker-sb-1',
-		layerName: 'markers2'
-	}
-];
+

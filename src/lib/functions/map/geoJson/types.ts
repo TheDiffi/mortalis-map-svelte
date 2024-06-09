@@ -1,16 +1,18 @@
 import type { MarkerTypes } from '../markers/types';
 
-export interface MarkerGeoJson extends GeoJSON.FeatureCollection<GeoJSON.Point, MarkerProperties> {
+export interface MarkerGeoJson
+	extends GeoJSON.FeatureCollection<GeoJSON.Point, MarkerFeatureProperties> {
 	name: 'markers';
 }
 
-export type MarkerFeature = GeoJSON.Feature<GeoJSON.Point, MarkerProperties>;
+export type MarkerFeature = GeoJSON.Feature<GeoJSON.Point, MarkerFeatureProperties>;
 
-export type MarkerProperties = {
-	title: string;
-	image: string | null;
+export type MarkerFeatureProperties = {
+	tempId: string;
 	type: MarkerTypes;
-	hasPopup: true;
+	name: string;
+	image: string | null;
+	hasPopup: boolean;
 	popup_content: string;
 	content: string;
 };
@@ -48,5 +50,3 @@ export type MarkerEvent<T> = T & {
 	sourceLayer: string;
 	state: { [key: string]: any };
 };
-
-

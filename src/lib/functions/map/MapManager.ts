@@ -1,4 +1,3 @@
-
 import mapboxgl from 'mapbox-gl';
 import StyleManager from './StylesManager';
 import MarkerManager from './markers/MarkerManager';
@@ -37,9 +36,12 @@ export default class MapManager {
 		if (this.mapbox === undefined) return;
 
 		this.styles.initStyles(this.mapbox);
-		//loadMapControls(this.mapbox, this.controls, this.changeStyle); //TODO
-
 		this.markerManager.loadAllMarkers(this.mapbox);
 	}
+
+	changeStyle(style: 'Normal' | 'Player') {
+		this.styles.loadStyle(style);
+	}
+
 
 }

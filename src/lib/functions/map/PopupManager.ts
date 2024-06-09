@@ -2,13 +2,9 @@ import type { Map, MapMouseEvent } from 'mapbox-gl';
 import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
 import { sanitizeHtml } from '../common/sanitize';
-import { MARKER_LAYERS } from '../constants';
 import { sidebarContent } from '../sidebar/sidebarStore';
-import type {
-	IWDFeatureTown,
-	MarkerEvent,
-	MarkerFeature
-} from './geoJson/types';
+import type { IWDFeatureTown, MarkerEvent, MarkerFeature } from './geoJson/types';
+import { MARKER_LAYERS } from './markers/types';
 
 type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {
 	features?: MarkerEvent<IWDFeatureTown | MarkerFeature>[] | undefined;
@@ -23,7 +19,7 @@ export default class PopupManager {
 	loadDefault(map: Map) {
 		if (!map) throw new Error('Map is not defined');
 
-		const popupLayers = MARKER_LAYERS.map((layer) => layer.layerName);
+		const popupLayers: string[] = MARKER_LAYERS.map((layer) => layer.type);
 		popupLayers.push('cities_layer');
 
 		map.on('mouseenter', popupLayers, this.handleMouseEnter.bind(this, map));
@@ -114,7 +110,7 @@ export default class PopupManager {
 			closeOnClick: false
 		})
 			.setLngLat(this.adjustCoordsForMultipleFeatures(e, coordinates))
-			.setHTML(this.getPopupContent(feature))
+			.setHTML(sanitizeHtml(this.getPopupContent(feature)))
 			.addTo(map);
 	}
 
@@ -124,21 +120,25 @@ export default class PopupManager {
 
 		if (['session', 'marker'].includes(type)) {
 			feature = feature as MarkerEvent<MarkerFeature>;
-			popupContent = marked.parse(popup_content ?? 'test', { async: false }) as string;
+			popupContent = this.sessionMarkerContent(feature);
 		} else if (feature.layer.id === 'cities_layer') {
 			feature = feature as MarkerEvent<IWDFeatureTown>;
-			popupContent = this.generateCitiesLayerContent(feature.properties.name, popup_content);
+			popupContent = this.contentWithTitle(feature.properties.name, popup_content);
 		}
 
 		console.log('popup content', popupContent);
 		return popupContent;
 	}
 
-	private generateCitiesLayerContent(name?: string, popup_content?: string): string {
-		const sanitizedTitle = sanitizeHtml(name ?? '');
-		const sanitizedContent = sanitizeHtml(popup_content ?? '');
+	private contentWithTitle(name?: string, popup_content?: string): string {
+		return `<h2 class='popup-name'>${name}</h2><hr><div class='popup-content'>${popup_content}</div>`;
+	}
 
-		return `<h2 style='padding-bottom: 5px;'>${sanitizedTitle}</h2><hr><p>${sanitizedContent}</p>`;
+	private sessionMarkerContent(feature:MarkerFeature ): string {
+		const { name, popup_content, type } = feature.properties;
+		const content = marked.parse(popup_content ?? 'test', { async: false }) as string;
+		return `<div class='popup-name marker ${type}'>${name}</div><div class='popup-content session'>${content}</div>`;
+
 	}
 
 	private adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {

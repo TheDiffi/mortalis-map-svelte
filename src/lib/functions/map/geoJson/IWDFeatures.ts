@@ -1,4 +1,5 @@
 import { type IWDFeature, type IWDFeatureProperties, IWDFeatureTypes } from './types';
+import iwdFeaturesJson from '$lib/data/geo/iwd_features.json';
 
 export interface IWDFeaturesGeoJson
 	extends GeoJSON.FeatureCollection<GeoJSON.Geometry, IWDFeatureGeoJsonProperties> {
@@ -21,15 +22,23 @@ type IWDFeatureGeoJsonProperties = {
 export class IWDFeatures
 	implements GeoJSON.FeatureCollection<GeoJSON.Geometry, IWDFeatureProperties>
 {
-	private json;
+	private static instance: IWDFeatures | null = null;
+	private json: IWDFeaturesGeoJson;
 	type: 'FeatureCollection' = 'FeatureCollection';
 	features: IWDFeature[] = [];
 
-	constructor(json: IWDFeaturesGeoJson) {
-		this.json = json;
-		this.features = this.json.features.map(feature => this.transformFeature(feature)).filter((f) => f !== null);
-		console.log("IWDFeatures", this.features);
-		
+	public static getInstance(): IWDFeatures {
+		if (!IWDFeatures.instance) {
+			IWDFeatures.instance = new IWDFeatures();
+		}
+		return IWDFeatures.instance;
+	}
+
+	private constructor() {
+		this.json = iwdFeaturesJson as IWDFeaturesGeoJson;
+		this.features = this.json.features
+			.map((feature) => this.transformFeature(feature))
+			.filter((f) => f !== null);
 	}
 
 	private transformFeature(jsonFeature: IWDFeatureGeoJson): IWDFeature | null {
@@ -46,7 +55,7 @@ export class IWDFeatures
 			name: f.name ?? f.Name ?? '',
 			description: f.description ?? '',
 			hasPopup: f.popup ?? false,
-			popup_content: f.popup_content ?? f.description?.slice(0, 100) + "..." ?? '',
+			popup_content: f.popup_content ?? f.description?.slice(0, 100) + '...' ?? '',
 			content: f.content ?? f.description ?? ''
 		};
 

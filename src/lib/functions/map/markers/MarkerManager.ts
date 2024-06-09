@@ -1,8 +1,7 @@
-import markerJson from '$lib/data/geo/markers.json';
 import type { AnyLayer, Map, SymbolLayer } from 'mapbox-gl';
-import { MARKER_ICON_URL, MARKER_LAYERS } from '../../constants';
-import type { MarkerFeature, MarkerGeoJson } from '../geoJson/types';
-import type { MarkerLayer, MarkerTypes } from './types';
+import { MarkerFeatures } from '../geoJson/MarkersFeatures';
+import { MARKER_ICON_URL } from '$lib/functions/constants';
+import { MARKER_LAYERS, type MarkerLayer } from './types';
 
 //TODO: refactor this to a svelete component
 // class LayerButton {
@@ -55,10 +54,10 @@ import type { MarkerLayer, MarkerTypes } from './types';
 
 //TODO: UNDER CONSTRUCTION
 class MarkerManager {
-	private markerJson: MarkerGeoJson;
+	private markerFeatures: MarkerFeatures;
 
 	constructor() {
-		this.markerJson = markerJson as MarkerGeoJson;
+		this.markerFeatures = MarkerFeatures.getInstance();
 	}
 
 	loadAllMarkers = (map: Map) => {
@@ -68,24 +67,21 @@ class MarkerManager {
 		MARKER_LAYERS.forEach((layer) => {
 			console.log('Loading marker layer: ' + layer.type);
 			this.loadMarkerLayer(map, layer);
-			this.addLayerToMap(layer, map);
 		});
 	};
 
 	loadMarkerLayer = (map: Map, layer: MarkerLayer) => {
 		// loads just the markers from the features -> markers
-		const markers = this.filterMarkersByType(this.markerJson, layer.type);
-		map.addSource(layer.layerName, {
+		const typedMarkers = this.markerFeatures.getFeaturesByType(layer.type);
+		map.addSource(layer.type, {
 			type: 'geojson',
-			data: { type: 'FeatureCollection', features: markers }
+			data: { type: 'FeatureCollection', features: typedMarkers }
 		});
-	};
 
-	addLayerToMap = (layer: MarkerLayer, map: Map) => {
 		const layerOptions = {
-			id: layer.layerName,
+			id: layer.type,
 			type: layer.style,
-			source: layer.layerName,
+			source: layer.type,
 			layout: {}
 		} as AnyLayer;
 
@@ -106,18 +102,6 @@ class MarkerManager {
 		} catch (error) {
 			console.log('MarkerSymbolsError: ' + error);
 		}
-	};
-
-	filterMarkersByType = (geojson: MarkerGeoJson, type: MarkerTypes) => {
-		const markers: MarkerFeature[] = [];
-
-		geojson.features.forEach((feature) => {
-			if (feature.properties.type === type) {
-				markers.push(feature);
-			}
-		});
-
-		return markers;
 	};
 }
 

@@ -1,25 +1,26 @@
-import featuresJson from '$lib/data/geo/iwd_features.json';
 import type { Map } from 'mapbox-gl';
 import { SOURCE_URLS } from '../constants';
 import PopupManager from './PopupManager';
-import { IWDFeatures, type IWDFeaturesGeoJson } from './geoJson/IWDFeatures';
+import { IWDFeatures } from './geoJson/IWDFeatures';
+import { MARKER_LAYERS, type MarkerLayer, type MarkerTypes } from './markers/types';
 
 const ENABLE_DEM = true;
 export type MapStyles = 'Normal' | 'Player';
 
 export default class StyleManager {
-	current: MapStyles;
+	currentStyle: MapStyles;
 	popupManager: PopupManager;
 	mapbox: Map | undefined;
+	markerLayers: MarkerLayer[] = [];
 
 	constructor() {
-		this.current = 'Normal';
+		this.currentStyle = 'Normal';
 		this.popupManager = new PopupManager();
 	}
 
 	initStyles(mapbox: Map) {
 		this.mapbox = mapbox;
-		this.loadStyle(this.current);
+		this.loadStyle(this.currentStyle);
 	}
 
 	loadStyle(stylename: MapStyles) {
@@ -41,9 +42,9 @@ export default class StyleManager {
 		if (this.mapbox === undefined) throw new Error('Mapbox not initialized');
 
 		console.log('Loading Sources: Normal');
-		const features = new IWDFeatures(featuresJson as IWDFeaturesGeoJson);
+		const features = IWDFeatures.getInstance();
 		console.log('Features loaded', features);
-		
+
 		try {
 			// loads all features -> features
 			this.mapbox.addSource('features', {
@@ -65,6 +66,9 @@ export default class StyleManager {
 
 		// Create a popup, but don't add it to the map yet.
 		this.popupManager.loadDefault(this.mapbox);
+
+		// set marker layers
+		this.markerLayers = MARKER_LAYERS;
 	}
 
 	setupStylePlayer() {
@@ -73,6 +77,9 @@ export default class StyleManager {
 		if (ENABLE_DEM) this.addDEM();
 		// Add daytime fog
 		this.addFog();
+
+		// set marker layers
+		this.markerLayers = MARKER_LAYERS;
 	}
 
 	addDEM() {
@@ -132,5 +139,21 @@ export default class StyleManager {
 				'circle-opacity': 0
 			}
 		});
+	}
+
+	toggleMarkerLayer(layerName: MarkerTypes) {
+		if (this.mapbox === undefined) return this.markerLayers;
+
+		const isVisible = this.mapbox.getLayoutProperty(layerName, 'visibility') === 'visible';
+		this.mapbox?.setLayoutProperty(layerName, 'visibility', !isVisible ? 'visible' : 'none');
+		const layer = this.markerLayers.find((layer) => layer.type === layerName);
+
+		if (!layer) {
+			console.warn(`Layer ${layerName} not found`);
+			return this.markerLayers;
+		}
+
+		layer.active = !isVisible;
+		return this.markerLayers;
 	}
 }
