@@ -1,15 +1,24 @@
 <script lang="ts">
-	import type { MarkerLayer, MarkerType } from "$lib/functions/map/markers/marker.types";
-	export let markerLayers: MarkerLayer[];
-	export let toggleSessionMarkers: (layerName: MarkerType) => void;
+	type ControlButton = {
+		value: string;
+		title: string;
+		style?: string;
+		active?: boolean;
+		disabled?: boolean;
+		on: { click: (value: string) => void };
+	};
+
+	export let buttons: ControlButton[];
 </script>
 
 <div class="control-group">
-	{#each markerLayers as markerLayer}
+	{#each buttons as button}
 		<button
-			value={markerLayer.type}
-			class:active={markerLayer.active}
-			on:click={() => toggleSessionMarkers(markerLayer.type)}>{markerLayer.title}</button
+			value={button.value}
+			class:active={button.active}
+			disabled={button.disabled}
+			style={button.style}
+			on:click={() => button.on.click(button.value)}>{button.title}</button
 		>
 	{/each}
 </div>
@@ -22,6 +31,8 @@
 		background-color: white;
 		display: flex;
 		flex-direction: column;
+		z-index: 2;
+		position: relative;
 	}
 
 	button {

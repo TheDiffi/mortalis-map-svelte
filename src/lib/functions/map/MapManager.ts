@@ -1,16 +1,17 @@
 import mapboxgl from 'mapbox-gl';
 import StyleManager from './StylesManager';
 import MarkerManager from './markers/MarkerManager';
+import { MapStyleName } from './map.types';
 
 export default class MapManager {
 	mapbox: mapboxgl.Map | undefined;
-	styles: StyleManager;
+	styleManager: StyleManager;
 	markerManager: MarkerManager;
 	containerId: string;
 
 	constructor(containerId: string, token: string) {
 		mapboxgl.accessToken = token;
-		this.styles = new StyleManager();
+		this.styleManager = new StyleManager();
 		this.markerManager = new MarkerManager();
 		this.containerId = containerId;
 	}
@@ -35,13 +36,9 @@ export default class MapManager {
 	onLoad() {
 		if (this.mapbox === undefined) return;
 
-		this.styles.initStyles(this.mapbox);
+		this.styleManager.initStyles(this.mapbox);
 		this.markerManager.loadAllMarkers(this.mapbox);
 	}
 
-	changeStyle(style: 'Normal' | 'Player') {
-		this.styles.loadStyle(style);
-	}
-
-
+	
 }

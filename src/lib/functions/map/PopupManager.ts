@@ -20,6 +20,9 @@ export default class PopupManager {
 	loadDefault(map: Map) {
 		if (!map) throw new Error('Map is not defined');
 
+		console.log('PopupManager loaded');
+		
+
 		const popupLayers: string[] = MARKER_LAYERS.map((layer) => layer.type);
 		popupLayers.push('cities_layer');
 
@@ -50,14 +53,14 @@ export default class PopupManager {
 	}
 
 	private handleMouseEnter(map: Map, e: MapMouseEvent) {
-		console.log('mouse enter', e);
-
+		console.log("Mouse entered popup layer");
 		map.getCanvas().style.cursor = 'pointer';
 		let newPopup = this.generatePopup(e, map);
 		if (newPopup) this.popup = newPopup;
 	}
 
 	private handleMouseLeave(map: Map, _e: MapMouseEvent) {
+		console.log("Mouse left popup layer");
 		map.getCanvas().style.cursor = '';
 		if (this.popup.isOpen()) this.popup.remove();
 	}
@@ -67,6 +70,8 @@ export default class PopupManager {
 	}
 
 	private handleTownClick(map: Map, e: MapMouseEvent) {
+		
+
 		if (!this.isMarkerMapboxEvent(e)) {
 			console.error('No features found in event', e);
 			return;
@@ -76,6 +81,8 @@ export default class PopupManager {
 			console.error('No features found in event', e);
 			return;
 		}
+		console.log('town clicked. Features:', e.features);
+
 		const townFeature = e.features[0] as MarkerEvent<IWDFeatureTown>;
 
 		const coordinates = townFeature.geometry.coordinates;
@@ -87,7 +94,6 @@ export default class PopupManager {
 			pitch: 25
 		});
 
-		console.log('town clicked', townFeature);
 
 		sidebarContent.setTitleAndDescription({
 			name: townFeature.properties?.name ?? '',
@@ -127,7 +133,6 @@ export default class PopupManager {
 			popupContent = this.contentWithTitle(feature.properties.name, popup_content);
 		}
 
-		console.log('popup content', popupContent);
 		return popupContent;
 	}
 
