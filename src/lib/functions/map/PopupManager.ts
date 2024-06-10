@@ -5,6 +5,7 @@ import { sanitizeHtml } from '../common/sanitize';
 import { sidebarContent } from '../sidebar/sidebarStore';
 import type { IWDFeatureTown, MarkerEvent, MarkerFeature } from './geoJson/types';
 import { MARKER_LAYERS } from './markers/types';
+import { POPUP_HTML } from '../constants';
 
 type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {
 	features?: MarkerEvent<IWDFeatureTown | MarkerFeature>[] | undefined;
@@ -131,14 +132,18 @@ export default class PopupManager {
 	}
 
 	private contentWithTitle(name?: string, popup_content?: string): string {
-		return `<h2 class='popup-name'>${name}</h2><hr><div class='popup-content'>${popup_content}</div>`;
+		return POPUP_HTML.default
+			.replace('${name}', name ?? '')
+			.replace('${content}', popup_content ?? '');
 	}
 
-	private sessionMarkerContent(feature:MarkerFeature ): string {
+	private sessionMarkerContent(feature: MarkerFeature): string {
 		const { name, popup_content, type } = feature.properties;
 		const content = marked.parse(popup_content ?? 'test', { async: false }) as string;
-		return `<div class='popup-name marker ${type}'>${name}</div><div class='popup-content session'>${content}</div>`;
-
+		return POPUP_HTML.session
+			.replace('${name}', name ?? '')
+			.replace('${content}', content)
+			.replace('${type}', type ?? '');
 	}
 
 	private adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {

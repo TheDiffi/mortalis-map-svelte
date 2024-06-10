@@ -19,4 +19,7 @@ export const TO_METER = 16;
 export const MARKER_ICON_URL =
 	'https://img.icons8.com/material-rounded/24/null/location-marker.png';
 
-
+export const POPUP_HTML = {
+	default: "<h2 class='popup-name'>${name}</h2><hr><div class='popup-content'>${content}</div>",
+	session:"<div class='popup-name marker ${type}'>${name}</div><div class='popup-content session'>${content}</div>",
+}

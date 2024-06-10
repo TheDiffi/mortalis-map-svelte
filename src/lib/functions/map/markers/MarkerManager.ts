@@ -3,56 +3,6 @@ import { MarkerFeatures } from '../geoJson/MarkersFeatures';
 import { MARKER_ICON_URL } from '$lib/functions/constants';
 import { MARKER_LAYERS, type MarkerLayer } from './types';
 
-//TODO: refactor this to a svelete component
-// class LayerButton {
-// 	button;
-
-// 	/**
-// 	 * @param {Layer} layer - The layer object
-// 	 * @param {Map.setLayerVisibility} setLayerVisibility - The function to set the layer visibility
-// 	 */
-// 	constructor(layer:Layer, setLayerVisibility: mapboxgl.Map) {
-// 		this.button = document.createElement('button');
-// 		this.button.innerText = layer.type;
-// 		this.button.value = layer.layerName;
-// 		this.button.classList.add('map-element-marker-button');
-// 		this.button.addEventListener('click', () => {
-// 			this.button.classList.toggle('active');
-// 			setLayerVisibility(layer.layerName, this.isActive());
-// 		});
-// 	}
-
-// 	getElement = () => {
-// 		return this.button;
-// 	};
-
-// 	isActive = () => {
-// 		return this.button.classList.contains('active');
-// 	};
-// }
-
-// generateMarkerLayerButtons = () => {
-//     const markerInputs = document.getElementById('marker-input-container');
-
-//     MARKER_LAYERS.forEach((layer) => {
-//         const button = new LayerButton(layer, this.mapManager.setLayerVisibility);
-//         markerInputs.appendChild(button.getElement());
-//     });
-// };
-
-// updateMarkerLayersVisibility = () => {
-//     console.log('Loading checked layers');
-//     const inputGroup = document.getElementById('marker-input-container');
-//     inputGroup.childNodes.forEach((btn) => {
-//         try {
-//             this.mapManager.setLayerVisibility(btn.value, this.isButtonActive(btn));
-//         } catch (error) {
-//             console.log('LayerVisibilityError: ' + error);
-//         }
-//     });
-// };
-
-//TODO: UNDER CONSTRUCTION
 class MarkerManager {
 	private markerFeatures: MarkerFeatures;
 
