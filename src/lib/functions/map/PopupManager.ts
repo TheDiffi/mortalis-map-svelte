@@ -3,8 +3,8 @@ import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
 import { sanitizeHtml } from '../common/sanitize';
 import { sidebarContent } from '../sidebar/sidebarStore';
-import type { IWDFeatureTown, MarkerEvent, MarkerFeature } from './geoJson/types';
-import { MARKER_LAYERS } from './markers/types';
+import type { IWDFeatureTown, MarkerEvent, MarkerFeature } from './geoJson/geojon.types';
+import { MARKER_LAYERS } from './markers/marker.types';
 import { POPUP_HTML } from '../constants';
 
 type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {

@@ -1,4 +1,4 @@
-import { type IWDFeature, type IWDFeatureProperties, IWDFeatureTypes } from './types';
+import { type IWDFeature, type IWDFeatureProperties, IWDFeatureTypes } from './geojon.types';
 import iwdFeaturesJson from '$lib/data/geo/iwd_features.json';
 
 export interface IWDFeaturesGeoJson

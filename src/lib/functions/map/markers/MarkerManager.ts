@@ -1,7 +1,7 @@
 import type { AnyLayer, Map, SymbolLayer } from 'mapbox-gl';
 import { MarkerFeatures } from '../geoJson/MarkersFeatures';
 import { MARKER_ICON_URL } from '$lib/functions/constants';
-import { MARKER_LAYERS, type MarkerLayer } from './types';
+import { MARKER_LAYERS, type MarkerLayer } from './marker.types';
 
 class MarkerManager {
 	private markerFeatures: MarkerFeatures;

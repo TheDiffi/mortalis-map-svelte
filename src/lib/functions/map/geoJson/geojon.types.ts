@@ -1,4 +1,4 @@
-import type { MarkerTypes } from '../markers/types';
+import type { MarkerType } from '../markers/marker.types';
 
 export interface MarkerGeoJson
 	extends GeoJSON.FeatureCollection<GeoJSON.Point, MarkerFeatureProperties> {
@@ -9,7 +9,7 @@ export type MarkerFeature = GeoJSON.Feature<GeoJSON.Point, MarkerFeatureProperti
 
 export type MarkerFeatureProperties = {
 	tempId: string;
-	type: MarkerTypes;
+	type: MarkerType;
 	name: string;
 	image: string | null;
 	hasPopup: boolean;

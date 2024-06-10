@@ -2,7 +2,7 @@ import type { Map } from 'mapbox-gl';
 import { SOURCE_URLS } from '../constants';
 import PopupManager from './PopupManager';
 import { IWDFeatures } from './geoJson/IWDFeatures';
-import { MARKER_LAYERS, type MarkerLayer, type MarkerTypes } from './markers/types';
+import { MARKER_LAYERS, type MarkerLayer, type MarkerType } from './markers/marker.types';
 
 const ENABLE_DEM = true;
 export type MapStyles = 'Normal' | 'Player';
@@ -141,7 +141,7 @@ export default class StyleManager {
 		});
 	}
 
-	toggleMarkerLayer(layerName: MarkerTypes) {
+	toggleMarkerLayer(layerName: MarkerType) {
 		if (this.mapbox === undefined) return this.markerLayers;
 
 		const isVisible = this.mapbox.getLayoutProperty(layerName, 'visibility') === 'visible';
