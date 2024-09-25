@@ -1,9 +1,11 @@
-version: '3'
+version: "3"
+
 
 services:
-  svelte-app:
-    build: . # Build the image from the current directory (adjust if needed)
-
+  map:
+    hostname: "map-service"
+    build: .  # Build the image from the current directory (adjust if needed)
+    
     working_dir: /app
 
     environment:
