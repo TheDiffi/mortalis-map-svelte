@@ -1,4 +1,3 @@
-
 export type LayerStyles =
 	| 'symbol'
 	| 'raster'
@@ -13,29 +12,28 @@ export type LayerStyles =
 	| 'sky';
 
 export type MarkerLayer = {
-	type: MarkerTypes;
+	type: MarkerType;
 	title: string;
 	style: LayerStyles;
 	symbol: string;
 	active: boolean;
 };
 
-export enum MarkerTypes {
+export enum MarkerType {
 	Session = 'session',
 	Marker = 'marker'
 }
 
-
 export const MARKER_LAYERS: MarkerLayer[] = [
 	{
-		type: MarkerTypes.Marker,
+		type: MarkerType.Marker,
 		title: 'Markers',
 		style: 'symbol',
 		symbol: 'marker-sb-1',
 		active: true
 	},
 	{
-		type: MarkerTypes.Session,
+		type: MarkerType.Session,
 		title: 'Session',
 		style: 'symbol',
 		symbol: 'marker-sb-1',

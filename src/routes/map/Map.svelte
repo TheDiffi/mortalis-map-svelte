@@ -1,40 +1,47 @@
 <script lang="ts">
-	import MapButton from '$lib/components/Buttons/MapButton.svelte';
 	import Spinner from '$lib/components/LoadingSpinner.svelte';
 	import MapManager from '../../lib/functions/map/MapManager';
 	import { onMount } from 'svelte';
 	import CornerElement from './MapCornerElement.svelte';
-	import type { MarkerTypes } from '$lib/functions/map/markers/types';
 	import MarkerLayerButtons from './MarkerLayerButtons.svelte';
+	import TestCube from '$lib/components/TestCube.svelte';
+	import type { MarkerType } from '$lib/functions/map/markers/marker.types';
+	import StyleChangeButtons from './StyleChangeButtons.svelte';
 
 	let isLoading = true;
 	let map: MapManager = new MapManager('map', import.meta.env.VITE_MAPBOX_ACCESS_TOKEN);
-	let markerLayers = map.styles.markerLayers; //TODO: does not workf
+	let markerLayers = map.styleManager.markerLayers;
+	let mapStyles = map.styleManager.styles;
 
 	onMount(() => {
 		map.initMap();
 		map.mapbox?.on('load', () => {
-			isLoading = false;
-			markerLayers = map.styles.markerLayers;
 			console.log('Map loaded');
+			isLoading = false;
+			markerLayers = map.styleManager.markerLayers;
 		});
 	});
 
-	function toggleSessionMarkers(layerName: MarkerTypes) {
-		markerLayers = map.styles.toggleMarkerLayer(layerName);
+	function toggleSessionMarkers(layerName: MarkerType) {
+		markerLayers = map.styleManager.toggleMarkerLayer(layerName);
 	}
 
-	$: {
-		console.log('markerLayers changed:', markerLayers);
-		// Add your code here
+	function handleStyleChange(styleName: string) {
+		mapStyles = map.styleManager.changeStyle(styleName);
 	}
 </script>
 
 <div id="map-container">
 	<div id="map"></div>
 
-	<CornerElement corner="bottom-right"
-		><MarkerLayerButtons {markerLayers} {toggleSessionMarkers} />
+	<CornerElement corner="top-left"><TestCube /></CornerElement>
+	<CornerElement corner="top-right"><TestCube /></CornerElement>
+	<CornerElement corner="bottom-right">
+		<MarkerLayerButtons {markerLayers} {toggleSessionMarkers} />
+	</CornerElement>
+	<CornerElement corner="bottom-left"
+		><TestCube />
+		<StyleChangeButtons {mapStyles} setStyle={handleStyleChange} />
 	</CornerElement>
 	{#if isLoading}
 		<Spinner />

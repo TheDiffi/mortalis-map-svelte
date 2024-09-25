@@ -1,8 +1,7 @@
-import { type MarkerFeature, type MarkerFeatureProperties } from './types';
+import { type MarkerFeature, type MarkerFeatureProperties } from './geojon.types';
 import markerJson from '$lib/data/geo/markers.json';
-import { MarkerTypes } from '../markers/types';
+import { MarkerType } from '../markers/marker.types';
 import { nanoid } from 'nanoid';
-
 
 export interface MarkerFeaturesGeoJson
 	extends GeoJSON.FeatureCollection<GeoJSON.Point, MarkerFeatureGeoJsonProperties> {
@@ -12,7 +11,7 @@ export interface MarkerFeaturesGeoJson
 type MarkerFeatureGeoJson = GeoJSON.Feature<GeoJSON.Point, MarkerFeatureGeoJsonProperties>;
 
 export type MarkerFeatureGeoJsonProperties = {
-	type: MarkerTypes;
+	type: MarkerType;
 	name?: string;
 	title?: string;
 	image?: string | null;
@@ -74,14 +73,14 @@ export class MarkerFeatures
 		return feature.content?.slice(0, 100) + '...';
 	}
 
-	private parseType(type?: string): MarkerTypes {
+	private parseType(type?: string): MarkerType {
 		switch (type?.toLowerCase()) {
 			case 'session':
-				return MarkerTypes.Session;
+				return MarkerType.Session;
 			case 'marker':
-				return MarkerTypes.Marker;
+				return MarkerType.Marker;
 			default:
-				return MarkerTypes.Marker;
+				return MarkerType.Marker;
 		}
 	}
 
@@ -89,7 +88,7 @@ export class MarkerFeatures
 		return this.features.find((f) => f.properties.tempId === tempId);
 	}
 
-	getFeaturesByType(type: MarkerTypes): MarkerFeature[] {
+	getFeaturesByType(type: MarkerType): MarkerFeature[] {
 		return this.features.filter((f) => f.properties.type === type);
 	}
 

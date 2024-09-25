@@ -79,6 +79,18 @@
 		padding: 10px 20px 20px 70px;
 	}
 
+	:global(#content-container ul) {
+		padding-left: 1rem;
+	}
+
+	:global(#content-container ul li) {
+		margin-bottom: 0.5rem;
+	}
+
+	:global(#content-container blockquote) {
+		margin: 1rem 0;
+	}
+
 	@media (min-width: 600px) {
 		.sidebar-container {
 			top: 0;

@@ -3,8 +3,9 @@ import mpgl from 'mapbox-gl';
 import { marked } from 'marked';
 import { sanitizeHtml } from '../common/sanitize';
 import { sidebarContent } from '../sidebar/sidebarStore';
-import type { IWDFeatureTown, MarkerEvent, MarkerFeature } from './geoJson/types';
-import { MARKER_LAYERS } from './markers/types';
+import type { IWDFeatureTown, MarkerEvent, MarkerFeature } from './geoJson/geojon.types';
+import { MARKER_LAYERS } from './markers/marker.types';
+import { POPUP_HTML } from '../constants';
 
 type MarkerMapboxEvent = mapboxgl.MapMouseEvent & {
 	features?: MarkerEvent<IWDFeatureTown | MarkerFeature>[] | undefined;
@@ -18,6 +19,9 @@ export default class PopupManager {
 
 	loadDefault(map: Map) {
 		if (!map) throw new Error('Map is not defined');
+
+		console.log('PopupManager loaded');
+		
 
 		const popupLayers: string[] = MARKER_LAYERS.map((layer) => layer.type);
 		popupLayers.push('cities_layer');
@@ -49,14 +53,14 @@ export default class PopupManager {
 	}
 
 	private handleMouseEnter(map: Map, e: MapMouseEvent) {
-		console.log('mouse enter', e);
-
+		console.log("Mouse entered popup layer");
 		map.getCanvas().style.cursor = 'pointer';
 		let newPopup = this.generatePopup(e, map);
 		if (newPopup) this.popup = newPopup;
 	}
 
 	private handleMouseLeave(map: Map, _e: MapMouseEvent) {
+		console.log("Mouse left popup layer");
 		map.getCanvas().style.cursor = '';
 		if (this.popup.isOpen()) this.popup.remove();
 	}
@@ -66,6 +70,8 @@ export default class PopupManager {
 	}
 
 	private handleTownClick(map: Map, e: MapMouseEvent) {
+		
+
 		if (!this.isMarkerMapboxEvent(e)) {
 			console.error('No features found in event', e);
 			return;
@@ -75,6 +81,8 @@ export default class PopupManager {
 			console.error('No features found in event', e);
 			return;
 		}
+		console.log('town clicked. Features:', e.features);
+
 		const townFeature = e.features[0] as MarkerEvent<IWDFeatureTown>;
 
 		const coordinates = townFeature.geometry.coordinates;
@@ -86,7 +94,6 @@ export default class PopupManager {
 			pitch: 25
 		});
 
-		console.log('town clicked', townFeature);
 
 		sidebarContent.setTitleAndDescription({
 			name: townFeature.properties?.name ?? '',
@@ -126,19 +133,22 @@ export default class PopupManager {
 			popupContent = this.contentWithTitle(feature.properties.name, popup_content);
 		}
 
-		console.log('popup content', popupContent);
 		return popupContent;
 	}
 
 	private contentWithTitle(name?: string, popup_content?: string): string {
-		return `<h2 class='popup-name'>${name}</h2><hr><div class='popup-content'>${popup_content}</div>`;
+		return POPUP_HTML.default
+			.replace('${name}', name ?? '')
+			.replace('${content}', popup_content ?? '');
 	}
 
-	private sessionMarkerContent(feature:MarkerFeature ): string {
+	private sessionMarkerContent(feature: MarkerFeature): string {
 		const { name, popup_content, type } = feature.properties;
 		const content = marked.parse(popup_content ?? 'test', { async: false }) as string;
-		return `<div class='popup-name marker ${type}'>${name}</div><div class='popup-content session'>${content}</div>`;
-
+		return POPUP_HTML.session
+			.replace('${name}', name ?? '')
+			.replace('${content}', content)
+			.replace('${type}', type ?? '');
 	}
 
 	private adjustCoordsForMultipleFeatures(e: MarkerMapboxEvent, coordinates: [number, number]) {
