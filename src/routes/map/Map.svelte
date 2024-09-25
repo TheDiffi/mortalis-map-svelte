@@ -55,4 +55,33 @@
 		height: 100%;
 		position: relative;
 	}
+
+	:global(.mapboxgl-popup-content) {
+		background-color: transparent;
+		font:
+			12px/20px 'Helvetica Neue',
+			Arial,
+			Helvetica,
+			sans-serif;
+		font-size: small;
+	}
+
+	:global(.mapboxgl-popup-content .mapboxgl-popup-close-button) {
+		border-radius: 50%;
+		margin: 7px 10px;
+		aspect-ratio: 1/1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-bottom: 3px;
+	}
+
+	:global(.mapboxgl-popup-content .mapboxgl-popup-close-button:focus-visible) {
+		outline: 0;
+	}
+
+	:global(.mapboxgl-popup-tip) {
+		margin-top: -4px;
+		margin-bottom: 3px;
+	}
 </style>

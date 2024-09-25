@@ -46,6 +46,13 @@
 
 }
 
+a {
+	text-decoration: none;
+	color: inherit;
+	font-weight: inherit;
+	font-size: inherit;
+}
+
 a.mapboxgl-ctrl-logo {
 	display: none !important;
 }
@@ -69,15 +76,16 @@ a.mapboxgl-ctrl-logo {
 .mapboxgl-popup {
 	max-width: 400px;
 	font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
-	background: url("https://cdn.glitch.com/9c785c08-7e0a-4245-ba71-af9b62f8eca4%2Fpopup.png?v=1588359473867");
-	background-size: 100% 100%;
 	overflow: visible;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.mapboxgl-popup-content {
-	background: none;
+.mapboxgl-popup>.mapboxgl-popup-content {
+	background: url("https://cdn.glitch.com/9c785c08-7e0a-4245-ba71-af9b62f8eca4%2Fpopup.png?v=1588359473867");
 	box-shadow: none;
+	background-size: 100% 100%;
 	text-align: center;
 	padding: 25px 30px 15px 30px;
 	color: black !important;
+	z-index: 2;
 }

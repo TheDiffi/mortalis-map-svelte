@@ -7,16 +7,8 @@
 			label: 'Home'
 		},
 		{
-			path: '/map',
-			label: 'The Map'
-		},
-		{
-			path: '/map-test',
-			label: 'The Map Test Area'
-		},
-		{
-			path: '/test',
-			label: 'The General Test Page'
+			path: '/test/beyonk',
+			label: 'Beyonk Map'
 		}
 	];
 </script>

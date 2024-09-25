@@ -19,7 +19,7 @@
 <div class="button-container">
 	<div>Test</div>
 	<MapButton
-		onClick={() => {
+		on:click={() => {
 			console.log('clicked');
 		}}>Test</MapButton
 	>
@@ -38,7 +38,7 @@
 		}}
 		variant="close"
 	/>
-	<MapButton onClick={updateContent}>Change Content Store</MapButton>
+	<MapButton on:click={()=>updateContent()}>Change Content Store</MapButton>
 </div>
 
 <div class="test-sidebar-container">

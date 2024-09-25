@@ -21,7 +21,6 @@ export default class PopupManager {
 		if (!map) throw new Error('Map is not defined');
 
 		console.log('PopupManager loaded');
-		
 
 		const popupLayers: string[] = MARKER_LAYERS.map((layer) => layer.type);
 		popupLayers.push('cities_layer');
@@ -53,16 +52,15 @@ export default class PopupManager {
 	}
 
 	private handleMouseEnter(map: Map, e: MapMouseEvent) {
-		console.log("Mouse entered popup layer");
+		console.log('Mouse entered popup layer');
 		map.getCanvas().style.cursor = 'pointer';
-		let newPopup = this.generatePopup(e, map);
-		if (newPopup) this.popup = newPopup;
+		this.activatePopup(map, e);
 	}
 
 	private handleMouseLeave(map: Map, _e: MapMouseEvent) {
-		console.log("Mouse left popup layer");
+		console.log('Mouse left popup layer');
 		map.getCanvas().style.cursor = '';
-		if (this.popup.isOpen()) this.popup.remove();
+		this.removePopup(map, _e);
 	}
 
 	private isMarkerMapboxEvent(e: any): e is MarkerMapboxEvent {
@@ -70,13 +68,10 @@ export default class PopupManager {
 	}
 
 	private handleTownClick(map: Map, e: MapMouseEvent) {
-		
-
 		if (!this.isMarkerMapboxEvent(e)) {
 			console.error('No features found in event', e);
 			return;
 		}
-
 		if (!e.features) {
 			console.error('No features found in event', e);
 			return;
@@ -84,7 +79,6 @@ export default class PopupManager {
 		console.log('town clicked. Features:', e.features);
 
 		const townFeature = e.features[0] as MarkerEvent<IWDFeatureTown>;
-
 		const coordinates = townFeature.geometry.coordinates;
 
 		map.flyTo({
@@ -94,11 +88,20 @@ export default class PopupManager {
 			pitch: 25
 		});
 
-
 		sidebarContent.setTitleAndDescription({
 			name: townFeature.properties?.name ?? '',
 			description: (marked.parse(townFeature.properties?.description) as string) ?? ''
 		});
+	}
+
+	private activatePopup(map: Map, e: MarkerMapboxEvent) {
+		let newPopup = this.generatePopup(e, map);
+		if (this.popup.isOpen()) this.popup.remove();
+		if (newPopup) this.popup = newPopup;
+	}
+
+	private removePopup(map: Map, _e: MarkerMapboxEvent) {
+		if (this.popup.isOpen()) this.popup.remove();
 	}
 
 	private generatePopup(e: MarkerMapboxEvent, map: Map) {
