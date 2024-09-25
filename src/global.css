@@ -16,6 +16,22 @@
 	--color-primary-600: #efc89e;
 	--color-primary-700: #f4dbc0;
 
+	/** CSS COLOR PALETTE */
+	--color2-svelte: #ff3e00;
+	--color2-svelte-light: #FFAE93;
+	--color2-green: #D9F9A5;
+	--color2-green-light: #F4FEC1;
+	--color2-green-dark: #D9F9A5;
+
+	/** Christmas Theme Colors */
+	--christmas-color-seashell: #F6E7E0;
+	--christmas-color-peach: #FDCDA9;
+	--christmas-color-cinnamon: #937B71;
+	--christmas-color-sienna: #70331E;
+	--christmas-color-olive: #34352D;
+	--christmas-color-raisin: #28201E;
+	--christmas-color-licorice: #21060B;
+
 	/** CSS DARK THEME SURFACE COLORS */
 	--color-surface-100: #121212;
 	--color-surface-200: #282828;
@@ -44,6 +60,14 @@
 	--color-gray-900: #212121;
 
 
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
 }
 
 a {

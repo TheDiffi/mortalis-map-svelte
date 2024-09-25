@@ -8,7 +8,11 @@
 		},
 		{
 			path: '/test/beyonk',
-			label: 'Beyonk Map'
+			label: 'the Beyonk Map'
+		},
+		{
+			path: '/test/advent-of-svelte',
+			label: 'the Advent of Svelte'
 		}
 	];
 </script>
