@@ -16,8 +16,7 @@
 		console.log('response >>:', response);
 		const result = await response.json();
 		console.log('result >>:', result);
-		// Assuming result has a structure that includes an array of items with a 'tally' property
-		// Adjust the following line according to the actual structure of the fetched data
+
 		data = result || [];
 	});
 </script>
