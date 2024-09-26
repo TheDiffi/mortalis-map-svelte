@@ -43,6 +43,7 @@
 		flex: 4 1 80%;
 		display: flex;
 		flex-direction: column;
+		overflow: scroll;
 	}
 
 	.title {

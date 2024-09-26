@@ -1,6 +1,6 @@
 <script>
-    import '../global.css'
-  </script>
-  
-  <slot />
-  
+	import '../app.css';
+	import '../global.css';
+</script>
+
+<slot></slot>

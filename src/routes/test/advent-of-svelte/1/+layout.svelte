@@ -1,4 +1,4 @@
-<div class="container">
+<div class="head-container">
 	<div class="head">
 		<div>
 			<h1>Day 1</h1>
@@ -10,7 +10,7 @@
 </div>
 
 <style>
-	.container {
+	.head-container {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
@@ -49,5 +49,6 @@
 
 	.content {
 		flex-grow: 1;
+		padding-left: 1em;
 	}
 </style>
