@@ -17,16 +17,13 @@
 	];
 </script>
 
-<div style="margin: 1em; padding-top:2em;text-align: center;">
-	<h1>Where to?</h1>
+<div class="m-4 pt-8 text-center">
+	<h1 class="text-8xl font-bold m-20 pt-20" >Where to?</h1>
 	<Subroutes {routes} />
 </div>
 
 <style>
 	h1 {
 		color: #ff3e00;
-		font-size: 5em;
-		font-synthesis: 1px;
-		padding-bottom: 0;
 	}
 </style>

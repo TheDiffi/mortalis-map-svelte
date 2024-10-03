@@ -9,7 +9,7 @@
 
 <div class="links">
 	{#each routes as route}
-		<p>
+		<p class="text-lg pb-1">
 			Visit <a href={route.path}>{route.label}</a>
 		</p>
 	{/each}
