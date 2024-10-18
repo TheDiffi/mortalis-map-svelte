@@ -2,7 +2,8 @@
 node_modules/
 
 # Build artifacts
-public/build/
+public/
+build/
 .svelte-kit/
 
 # Coverage reports

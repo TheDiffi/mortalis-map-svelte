@@ -36,9 +36,10 @@ export class IWDFeatures
 
 	private constructor() {
 		this.json = iwdFeaturesJson as IWDFeaturesGeoJson;
-		this.features = this.json.features
+		const temp = this.json.features
 			.map((feature) => this.transformFeature(feature))
-			.filter((f) => f !== null);
+			.filter((f) => f !== null) as IWDFeature[];
+		this.features = temp;
 	}
 
 	private transformFeature(jsonFeature: IWDFeatureGeoJson): IWDFeature | null {

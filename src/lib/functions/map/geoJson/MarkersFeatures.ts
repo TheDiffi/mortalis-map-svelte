@@ -40,7 +40,7 @@ export class MarkerFeatures
 		this.json = markerJson as MarkerFeaturesGeoJson;
 		this.features = this.json.features
 			.map((feature) => this.transformFeature(feature))
-			.filter((f) => f !== null);
+			.filter((f) => f !== null) as MarkerFeature[];
 	}
 
 	private transformFeature(jsonFeature: MarkerFeatureGeoJson): MarkerFeature | null {

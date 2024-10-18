@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose up -d --build --remove-orphans
+git pull && docker-compose up -d --build --remove-orphans

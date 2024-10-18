@@ -13,10 +13,22 @@
 		"lint": "prettier --check .",
 		"format": "prettier --write ."
 	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.45.4",
+		"clsx": "^2.1.1",
+		"dompurify": "^3.1.3",
+		"dotenv": "^16.4.5",
+		"mapbox-gl": "^2.3.5",
+		"marked": "^12.0.2",
+		"nanoid": "^5.0.7",
+		"svelte-routing": "^2.13.0",
+		"tailwind-merge": "^2.5.2",
+		"tailwind-variants": "^0.2.1"
+	},
 	"devDependencies": {
 		"@beyonk/svelte-mapbox": "^9.1.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/adapter-node": "^5.0.1",
+		"@sveltejs/adapter-node": "^5.2.8",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.14",
@@ -36,18 +48,9 @@
 		"vite": "^5.0.3",
 		"vitest": "^1.2.0"
 	},
-	"type": "module",
-	"dependencies": {
-		"@supabase/supabase-js": "^2.45.4",
-		"clsx": "^2.1.1",
-		"dompurify": "^3.1.3",
-		"dotenv": "^16.4.5",
-		"mapbox-gl": "^2.3.5",
-		"marked": "^12.0.2",
-		"nanoid": "^5.0.7",
-		"svelte-routing": "^2.13.0",
-		"tailwind-merge": "^2.5.2",
-		"tailwind-variants": "^0.2.1"
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-musl": "4.9.5"
 	},
+	"type": "module",
 	"module": "index.ts"
 }
