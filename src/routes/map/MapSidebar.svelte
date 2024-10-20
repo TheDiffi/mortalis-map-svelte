@@ -2,23 +2,26 @@
 	import HamburgerButton from '$lib/components/Buttons/HamburgerButton.svelte';
 	import { onMount } from 'svelte';
 	import { sidebarContent } from '../../lib/functions/sidebar/sidebarStore';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import { useMediaQuery } from '$lib/functions/useMediaQuery';
 
 	export let hidden = false;
-	let active = true;
+	let active = !hidden;
 	let buttonRotation = '0deg';
-	$: position = active ? '0' : '-100%';
+
+	let isSmallStore = useMediaQuery('(min-width: 600px)');
 
 	onMount(() => {
-		return rotateButtonOnMobile();
+		function registerRotateButton() {
+			const handleResize = () => (buttonRotation = window.innerWidth <= 600 ? '-90deg' : '0deg');
+			window.addEventListener('resize', handleResize);
+			handleResize(); // Call once to set initial rotation
+			return () => window.removeEventListener('resize', handleResize);
+		}
+
+		return registerRotateButton();
 	});
-
-	function rotateButtonOnMobile() {
-		const handleResize = () => (buttonRotation = window.innerWidth <= 600 ? '-90deg' : '0deg');
-		window.addEventListener('resize', handleResize);
-		handleResize(); // Call once to set initial rotation
-
-		return () => window.removeEventListener('resize', handleResize);
-	}
 
 	function toggleSidebar() {
 		active = !active;
@@ -29,8 +32,17 @@
 	<div class="button-container" class:active>
 		<HamburgerButton variant="arrow-1" {active} rotation={buttonRotation} onClick={toggleSidebar} />
 	</div>
-	{#if !hidden}
-		<div id="sidebar" class:not-active={!active}>
+	{#if active}
+		<div
+			id="sidebar"
+			transition:fly={{
+				duration: 300,
+				opacity: 1,
+				x: $isSmallStore ? -600 : 0,
+				y: $isSmallStore ? 0 : 500,
+				easing: quintOut
+			}}
+		>
 			<div id="content-container">
 				{@html $sidebarContent}
 			</div>
@@ -43,7 +55,7 @@
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		max-height: 20vh;
+
 		width: 100%;
 	}
 
@@ -52,27 +64,30 @@
 		width: 100%;
 		overflow: scroll;
 		background-color: var(--color-primary-700);
+		height: 20vh;
 		left: 0;
 		top: 0;
-		transition:
-			left 0.6s cubic-bezier(0.165, 0.84, 0.44, 1),
-			top 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 	}
 
 	#sidebar.not-active {
-		top: 21vh ;
+		top: 21vh;
 	}
 
 	.button-container {
 		position: absolute;
 		bottom: 0;
 		left: 0;
+		height: fit-content;
+		width: fit-content;
 		z-index: 100;
 		padding: 15px;
+
+		transform: translateY(0px);
+		transition: transform 0.31s cubic-bezier(0.23, 1, 0.32, 1);
 	}
 
 	.button-container.active {
-		bottom: auto;
+		transform: translateY(calc(-20vh - -100%));
 	}
 
 	#content-container {
@@ -94,16 +109,18 @@
 	@media (min-width: 600px) {
 		.sidebar-container {
 			top: 0;
+			width: initial;
 		}
 
 		#sidebar.not-active {
-			left: -50% ;
+			left: -50%;
 			top: 0;
 		}
 
 		#sidebar {
 			display: block;
 			height: 100vh;
+			max-height: inherit;
 			width: 25vw;
 			max-width: 700px;
 			min-width: 300px;
@@ -115,6 +132,10 @@
 
 		.button-container {
 			top: 0;
+		}
+
+		.button-container.active {
+			transform: translateY(0px);
 		}
 	}
 </style>
