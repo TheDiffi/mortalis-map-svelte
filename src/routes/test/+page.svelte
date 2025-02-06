@@ -13,6 +13,10 @@
 		{
 			path: '/test/advent-of-svelte',
 			label: 'the Advent of Svelte'
+		},
+		{
+			path: '/test/glucose-graph',
+			label: 'Glucose Graph'
 		}
 	];
 </script>
