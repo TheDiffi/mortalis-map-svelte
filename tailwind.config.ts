@@ -1,14 +1,9 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
 import colors from 'tailwindcss/colors';
-import layerstack from '@layerstack/tailwind/plugin';
 
 const config = {
 	darkMode: ['class'],
-	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		'./node_modules/svelte-ux/**/*.{svelte,js}',
-		'./node_modules/layerchart/**/*.{svelte,js}'
-	],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	safelist: ['dark'],
 	theme: {
 		container: {
@@ -25,12 +20,6 @@ const config = {
 				ring: 'hsl(var(--ring) / <alpha-value>)',
 				background: 'hsl(var(--background) / <alpha-value>)',
 				foreground: 'hsl(var(--foreground) / <alpha-value>)',
-				'primary-content': 'white',
-				'surface-100': 'white',
-				'surface-200': colors['gray']['100'],
-				'surface-300': colors['gray']['300'],
-				'surface-content': colors['gray']['900'],
-				'color-scheme': 'light',
 				primary: {
 					DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
 					foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
@@ -69,11 +58,7 @@ const config = {
 				sans: [...fontFamily.sans]
 			}
 		}
-	},
-
-	plugins: [
-		layerstack // uses hsl() color space by default. To use oklch(), use: svelteUx({ colorSpace: 'oklch' }),
-	]
+	}
 };
 
 export default config;

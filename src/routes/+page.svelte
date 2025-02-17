@@ -15,8 +15,8 @@
 			label: 'The Map Test Area'
 		},
 		{
-			path: '/test',
-			label: 'The General Test Page'
+			path: '/beyonk',
+			label: 'Beyonk Map'
 		}
 	];
 </script>
