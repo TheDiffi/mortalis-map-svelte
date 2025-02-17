@@ -44,7 +44,7 @@
 			<MapButton on:click={setMapCenter}>Go To House</MapButton>
 		</div>
 		<div class="ctrl-top-right">
-			<MapButton on:click={setMapCenter}><a href="/test">Back</a></MapButton>
+			<MapButton on:click={setMapCenter}><a href="/">Back</a></MapButton>
 		</div>
 	</Map>
 </div>
