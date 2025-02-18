@@ -1,9 +1,15 @@
 FROM node:18-alpine as build
 WORKDIR /app
 
+
 COPY package*.json ./
 COPY svelte.config.js ./
 COPY vite.config.ts ./
+COPY tailwind.config.ts ./
+COPY components.json ./
+COPY tsconfig.json ./
+COPY postcss.config.js ./
+
 RUN npm install
 
 COPY . .
